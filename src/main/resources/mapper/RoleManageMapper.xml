@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.wjw.priviligemanagementsystem.mapper.UserMapper" >
+
+  <select id="selectRole" parameterType="String" resultType="xyz.wjw.priviligemanagementsystem.entity.Role">
+    select * from sys_role
+  </select>
+
+  <delete id="roleDelete">
+    delete from sys_role where id in(
+    <foreach collection="ids" item="item" separator=",">
+      #{item}
+    </foreach>
+    )
+  </delete>
+
+</mapper>
