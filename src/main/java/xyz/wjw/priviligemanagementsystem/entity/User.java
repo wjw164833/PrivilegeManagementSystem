@@ -1,18 +1,28 @@
 package xyz.wjw.priviligemanagementsystem.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    private Long id;
+@TableName("sys_user")
+public class User implements Serializable {
+
+    private static final long serialVersionUID=1L;
+
+    private String id;
 
     private String name;
 
-    private Long depid;
+    private String depid;
 
     private String account;
 
@@ -24,8 +34,12 @@ public class User {
 
     private String sex;
 
-    private Integer status;
+    private String status;
 
-    private Short isdeleted;
+    private String isdeleted;
+    @JsonIgnore
+    @ApiModelProperty(value = "登录凭证")
+    @TableField("login_token")
+    private String loginToken;
 
 }

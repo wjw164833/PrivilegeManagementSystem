@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>table模块快速使用</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<table id="demo" lay-filter="test"></table>
+<script type="textml" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script src="/layui/layui.js"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 312
+            ,url: 'user/userSelect' //数据接口
+            ,parseData: function (res) {
+                return {
+                    "code":res.code==200?0:res.code,
+                    "msg":res.msg,
+                    "data": res.data.returnData
+                }}
+            ,page: true //开启分页
+            ,cols: [ [ //表头
+                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field:'name', title:'用户名', width:120, edit: 'text'}
+                ,{field:'depId', title:'部门', width:120, edit: 'text'}
+                ,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
+                        return '<em>'+ res.email +'</em>'
+                    }}
+                ,{field:'account', title:'账号', width:80, sort: true}
+                ,{field:'sex', title:'性别', width:80, templet: function(res){
+                        return res.sex == 0?'男':'女'}}
+                ,{field:'mobile', title:'电话', width:100}
+                ,{field:'status', title:'状态', width:120 ,templet: function(res){
+                        return res.status == 0?'正常':'禁用'}}
+            ] ]
+        });
+
+    });
+</script>
+</body>
+</html>

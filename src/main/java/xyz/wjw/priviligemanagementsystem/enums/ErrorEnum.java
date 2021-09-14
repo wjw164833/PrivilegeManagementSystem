@@ -1,6 +1,6 @@
 package xyz.wjw.priviligemanagementsystem.enums;
 
-import xyz.wjw.dto.BaseErrorInfoInterface;
+import xyz.wjw.priviligemanagementsystem.dto.BaseErrorInfoInterface;
 
 /**
  * 常见错误枚举

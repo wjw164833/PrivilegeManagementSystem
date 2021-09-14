@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <style>
+
+        form{
+            margin-left: 10px;
+        }
+        input{
+            max-width: 300px;
+        }
+        .login_rem a{
+            color: #FD5353;
+        }
+        .login_line8 button{
+            width: 90%;
+            background-color: #5FB878;
+            margin-left: 4%;
+            margin-bottom: 3%;
+        }
+        .layui-form-checked[lay-skin=primary] i{
+            border-color:#FD5353 !important;
+        }
+        .layui-form-checked i, .layui-form-checked:hover i{
+            background-color:  #FD5353 !important;
+        }
+        .layui-form-item{
+            margin-bottom: 20px;
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="layui-row">
+    <form class="layui-form layui-form-pane">
+        <div class="layui-form-item" style="margin-top: 5px">
+            <label class="layui-form-label">
+                <i class="layui-icon layui-icon-username"></i></label>
+            <div class="layui-input-block">
+                <input type="text" name="account" lay-verify="account" class="layui-input"
+                       placeholder="请输入登录账号"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i
+                    class="layui-icon layui-icon-password"></i></label>
+            <div class="layui-input-block">
+                <input type="password" name="password" id="password" lay-verify="password" class="layui-input"
+                       placeholder="请输入密码"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i
+                    class="layui-icon layui-icon-password"></i></label>
+            <div class="layui-input-block">
+                <input type="password" name="userpass" id="password_twice" lay-verify="password_twice" class="layui-input"
+                       placeholder="确认密码"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i
+                    class="layui-icon layui-icon-username"></i></label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="name" class="layui-input" placeholder="请输入真实姓名"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i class="layui-icon layui-icon-face-smile-b"></i></label>
+            <div class="layui-input-block">
+                <select name="sex">
+                    <option value="">请选择性别</option>
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <i class="layui-icon layui-icon-cellphone"></i></label>
+            <div class="layui-input-block">
+                <input type="tel" name="mobile" lay-verify="mobile" class="layui-input" placeholder="请输入手机号"/>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <i class="layui-icon layui-icon-at"></i></label>
+            <div class="layui-input-block">
+                <input type="email" name="email" lay-verify="email" class="layui-input" placeholder="请输入邮箱"/>
+            </div>
+        </div>
+
+        <div class="layui-button-inline login_line8">
+            <button class="layui-btn" lay-submit="" lay-filter="register">注册</button>
+        </div>
+
+    </form>
+</div>
+<script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+<script src="/layui/layui.js"></script>
+<script src="/js/register.js"></script>
+</body>
+</html>

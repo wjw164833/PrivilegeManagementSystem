@@ -7,5 +7,47 @@
     where account=#{account} and password=#{password};
   </select>
 
-  <
+  <!--分页记录总数Map映射-->
+  <resultMap id="userTotal" type="java.lang.Integer"></resultMap>
+
+  <resultMap id="SelectUserVo" type="xyz.wjw.priviligemanagementsystem.vo.SelectUserVo"></resultMap>
+
+  <select id="userSelect" parameterType="xyz.wjw.priviligemanagementsystem.dto.UserSelectQuery" resultMap="SelectUserVo,userTotal">
+    SELECT SQL_CALC_FOUND_ROWS
+    sys_user.id as id,
+    sys_user.`name` as name,
+    sys_user.depId,
+    sys_user.account as account,
+    sys_user.`password`,
+    sys_user.mobile,
+    sys_user.email,
+    sys_user.sex as sex,
+    sys_user.`status`,
+    sys_user.isDeleted,
+    sys_user.login_token
+    FROM
+    sys_user
+    <where>
+      <if test="name!=null and name!=''">
+      sys_user.`name` LIKE "%"#{name}"%"
+      </if>
+      <if test="account!=null and account!=''">
+        and sys_user.account LIKE "%"#{account}"%"
+      </if>
+      <if test="sex!=null and sex!=''">
+        and sys_user.sex = #{sex}
+      </if>
+    </where>
+    order by id
+    LIMIT ${pageIndex},${pageSize};
+    SELECT FOUND_ROWS() as number  ;
+  </select>
+
+  <delete id="userDelete">
+    delete from sys_user where id in(
+    <foreach collection="ids" item="item" separator=",">
+      #{item}
+    </foreach>
+    )
+  </delete>
 </mapper>

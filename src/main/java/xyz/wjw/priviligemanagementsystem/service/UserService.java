@@ -2,23 +2,40 @@ package xyz.wjw.priviligemanagementsystem.service;
 
 import org.springframework.lang.NonNull;
 import xyz.wjw.priviligemanagementsystem.bo.UserDeleteBo;
-import xyz.wjw.priviligemanagementsystem.config.Result;
+import xyz.wjw.priviligemanagementsystem.bo.UserSelectBo;
 import xyz.wjw.priviligemanagementsystem.entity.User;
+import xyz.wjw.priviligemanagementsystem.vo.Result;
+
+import java.util.List;
 
 public interface UserService {
 
     @NonNull
     Result login(
-            @NonNull String account,
-            @NonNull String password
+            UserSelectBo userSelectBo
 
     );
 
-    Result userSelect(User user, Object o);
+    Result userSelect(
+            UserSelectBo userSelectBo,
+            String id
+    );
 
-    Result userAdd(User user);
+    Result userAdd(
+            UserSelectBo userSelectBo
+    );
 
-    Result userUpdate(User user);
+    Result userUpdate(
+            UserSelectBo userSelectBo
+    );
 
-    Result userDelete(UserDeleteBo userDeleteBo);
+    Result userDelete(
+            @NonNull List<String> ids
+            );
+
+    User findByUserName(String userName);
+
+    Result getUserDate(String id);
+
+    Result loginout(String id);
 }

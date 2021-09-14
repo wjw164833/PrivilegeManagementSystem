@@ -1,5 +1,7 @@
 package xyz.wjw.priviligemanagementsystem.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,15 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@TableName("sys_role")
 public class Role {
 
-    private Long id;
+    private String id;
 
     private String name;
 
     private String remark;
 
-    private Integer status;
+    private String status;
 
-    private Short isdeleted;
+    private String isdeleted;
+
 }

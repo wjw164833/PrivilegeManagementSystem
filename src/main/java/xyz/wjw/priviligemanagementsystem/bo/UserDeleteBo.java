@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author ASUS
  */
@@ -12,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class UserDeleteBo {
 
     @ApiModelProperty(value = "用户ID")
-    private String[] id;
+    private List<String> ids;
 
 }

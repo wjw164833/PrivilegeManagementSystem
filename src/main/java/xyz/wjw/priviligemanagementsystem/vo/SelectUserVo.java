@@ -3,14 +3,16 @@ package xyz.wjw.priviligemanagementsystem.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class SelectUserVo {
+public class SelectUserVo implements Serializable {
     @ApiModelProperty(value = "用户id")
     private String id;
 
     private String name;
 
-    private Long depid;
+    private String depid;
 
     private String account;
 
@@ -22,9 +24,9 @@ public class SelectUserVo {
 
     private String sex;
 
-    private Integer status;
+    private String  status;
 
-    private Short isdeleted;
+    private String isdeleted;
 
 
 }
