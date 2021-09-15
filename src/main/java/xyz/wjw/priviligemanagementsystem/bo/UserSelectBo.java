@@ -14,7 +14,7 @@ public class UserSelectBo implements Serializable {
 
     private String name;
 
-    private String depid;
+    private String depId;
 
     private String account;
 

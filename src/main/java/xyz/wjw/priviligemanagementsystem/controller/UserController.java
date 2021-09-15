@@ -76,15 +76,13 @@ public class UserController {
     @ApiOperation(value = "用户查询", notes = "用户查询接口")
     @PostMapping("/userSelect")
     public Result userSelect(@RequestBody UserSelectBo userSelectBo) {
-        return userService.userSelect(userSelectBo,null
-        );
+        return userService.userSelect(userSelectBo,null);
     }
 
     @ApiOperation(value = "用户增加", notes = "用户增加接口")
     @PutMapping("/userAdd")
     public Result userAdd(@RequestBody UserSelectBo userSelectBo) {
-        return userService.userAdd(userSelectBo
-        );
+        return userService.userAdd(userSelectBo);
     }
 
     @ApiOperation(value = "用户修改", notes = "用户修改接口")

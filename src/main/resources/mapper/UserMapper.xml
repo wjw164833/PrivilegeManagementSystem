@@ -29,13 +29,10 @@
     sys_user
     <where>
       <if test="name!=null and name!=''">
-      sys_user.`name` LIKE "%"#{name}"%"
+      name LIKE "%"#{name}"%"
       </if>
       <if test="account!=null and account!=''">
-        and sys_user.account LIKE "%"#{account}"%"
-      </if>
-      <if test="sex!=null and sex!=''">
-        and sys_user.sex = #{sex}
+        and account LIKE "%"#{account}"%"
       </if>
     </where>
     order by id
