@@ -20,5 +20,5 @@ public class RoleSelectQuery {
 
     private String status;
 
-    private String isdeleted;
+    private String isDeleted;
 }

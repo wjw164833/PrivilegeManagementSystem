@@ -3,8 +3,10 @@ package xyz.wjw.priviligemanagementsystem.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class SelectRoleVo {
+public class SelectRoleVo implements Serializable {
     @ApiModelProperty(value = "角色id")
     private String id;
 

@@ -37,6 +37,21 @@ public class pagesController {
         return "user/userList";
     }
 
+    @RequestMapping(value="/roleList")
+    public String roleList(){
+        return "user/roleList";
+    }
+
+    @RequestMapping(value="/priviligeList")
+    public String priviligeList(){
+        return "user/priviligeList";
+    }
+
+    @RequestMapping(value="/priviligeInfomation")
+    public String priviligeInfomation(){
+        return "user/priviligeInfomation";
+    }
+
     @RequestMapping(value="/updateUser")
     public String updateUser(){
         return "user/updateUser";

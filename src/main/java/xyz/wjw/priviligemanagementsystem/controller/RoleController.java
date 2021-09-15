@@ -30,8 +30,8 @@ public class RoleController {
 
 
     @ApiOperation(value = "角色权限查询", notes = "角色权限查询接口")
-    @GetMapping("/roleSelect")
-    public Result roleSelect(@RequestBody @Validated RoleSelectBo roleSelectBo) {
+    @PostMapping("/roleSelect")
+    public Result roleSelect(@RequestBody RoleSelectBo roleSelectBo) {
         return roleService.roleSelect(roleSelectBo,null
         );
     }

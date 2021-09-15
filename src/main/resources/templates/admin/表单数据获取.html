@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--    css引入-->
+    <link rel="stylesheet" href="lib/layui/css/layui.css">
+    <!--    js引入-->
+    <script src="lib/layui/layui.js"></script>
+</head>
+<body>
+<!--加载模块-->
+<div class="layui-container">
+    <div style="height: 200px"></div>
+    <form class="layui-form " action="">
+        <div class="layui-row">
+            <div class="layui-col-md3 layui-col-md-offset1">
+                <!-- lay-verify="required" 数据验证   required（必填）-->
+                <input type="text" name="name" placeholder="请输用户名" autocomplete="off"
+                       class="layui-input ">
+            </div>
+            <div class="layui-col-md3 layui-col-md-offset1">
+                <input type="text" name="mobile" placeholder="请输联系电话" autocomplete="off"
+                       class="layui-input layui-col-md3">
+            </div>
+            <button class="layui-btn layui-col-md-offset1" lay-submit lay-filter="formDemo">查询</button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-col-md-offset1">重置</button>
+        </div>
+    </form>
+    <table id="demo" lay-filter="test"></table>
+</div>
+
+
+<script type="text/javascript">
+    layui.use(['table', 'form'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        // var layer = layui.layer;
+        // var $ = layui.jquery;
+        var name = null;
+        var mobile = null;
+        //获取查询数据
+        form.on('submit(formDemo)', function (data) {
+            // console.log(data.elem); //被执行事件的元素DOM对象，一般为button对象
+            // console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field);//当前容器的全部表单字段，名值对形式：{name: value}
+            name = data.field.name;
+            mobile = data.field.mobile;
+            console.log(name + mobile);
+            //调用
+            sxym(name,mobile);
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        //调用
+        sxym();
+        //请求封装
+        function sxym(name, mobile) {
+            /*   获取用户列表 */
+            table.render({
+                elem: "#demo",
+                // 设置指定数据表格生成的容器ID
+                id: "tId", // 设置数据表格刷新的ID
+                url: "http://127.0.0.1:8082/user/selectUser", //获取数据的请求地址
+                //请求方法
+                method: 'post',
+                //接口的其它参数
+                where: {number: name, page: mobile},
+                //请求头
+                // headers: {token: 'sasasas'},
+                //发送数据类型
+                contentType: 'application/json',
+
+                page: true, // 是否开启分页
+                limit: 5, //每页显示多少条数
+                limits: [5, 10, 15], // 动态修改页容量
+                request: {
+                    // 自定义获取分页数据的请求参数默认为page  limit
+                    pageName: 'page',
+                    limitName: 'number'
+                },
+
+                parseData: function (d) {
+                    console.log(d);
+                    // 重新定义数据的返回格式成layui默认的格式
+                    return {
+                        code: d.code == 200 ? 0 : d.code,
+                        "msg": d.message,
+                        count: d.data.paginationData.sum,
+                        data: d.data.returnDate
+                    };
+                }
+                ,
+                cols: [[// 数据表格的列设置
+                    {field: "name", title: "用户姓名", width: "14.2%", sort: true, style: "text-align:left;"},
+                    {field: "account", title: "账号", width: "14.2%", sort: true},
+                    {field: "mobile", title: "电话", width: "14.2%", sort: true},
+                    {field: "email", title: "邮箱", width: "14.2%", sort: true},
+                    {
+                        field: "sex", title: "性别", width: "14.2%", sort: true, templet: function (d) {
+                            console.log(d);
+                            if (d.sex == 0) {
+                                return '男';
+                            }
+                            ;
+                            if (d.sex == 1) {
+                                return '女';
+                            }
+                            ;
+                            if (d.sex == 2) {
+                                return '保密';
+                            }
+                        }
+                    },
+                    {
+                        field: "status", title: "状态", width: "14.2%", sort: true, templet: function (d) {
+                            return d.status == 1 ? '正常' : '禁用';
+                        }
+                    },
+                    {
+                        title: "操作", width: "15.5%", align: "center", templet: function (d) {
+                            var str = "<button type='button' class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'>删除</button>";
+                            str += "<button type='button' class='layui-btn layui-btn-xs layui-btn-warm' lay-event='edit'>更新</button>";
+                            return str;
+                        }
+                    }
+                ]]
+            });
+        };
+    });
+
+</script>
+</body>
+</html>

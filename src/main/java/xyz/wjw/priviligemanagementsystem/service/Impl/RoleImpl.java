@@ -41,9 +41,9 @@ public class RoleImpl implements RoleService {
         if(id!=null) {
             int sum = ((List<Integer>) result.get(1)).get(0);
             if(sum==0){
-                return xyz.wjw.priviligemanagementsystem.vo.Result.error("角色不存在");
+                return Result.error("角色不存在");
             }
-            return  xyz.wjw.priviligemanagementsystem.vo.Result.success(((List<SelectRoleVo>) result.get(0)).get(0));
+            return Result.success(((List<SelectRoleVo>) result.get(0)).get(0));
         }
         int sum = ((List<Integer>) result.get(1)).get(0);
         List<SelectRoleVo> ClassVos = (List<SelectRoleVo>) result.get(0);
@@ -52,13 +52,13 @@ public class RoleImpl implements RoleService {
         if (sum == 0) {
             SelectRoleVo selectRoleVo = new SelectRoleVo();
             ClassVos.add(selectRoleVo);
-            return xyz.wjw.priviligemanagementsystem.vo.Result.success(new QueryReturnDate(paginationDate, ClassVos));
+            return Result.success(new QueryReturnDate(paginationDate, ClassVos));
         }
         //当前页大于总页数
         if (PaginationUtils.isValid(paginationDate)) {
             return xyz.wjw.priviligemanagementsystem.vo.Result.error("当前页大于总页数");
         }
-        return xyz.wjw.priviligemanagementsystem.vo.Result.success(new QueryReturnDate(paginationDate, ClassVos));
+        return Result.success(new QueryReturnDate(paginationDate, ClassVos));
     }
 
     @Override

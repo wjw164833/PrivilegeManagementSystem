@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "用户查询", notes = "用户查询接口")
-    @GetMapping("/userSelect")
+    @PostMapping("/userSelect")
     public Result userSelect(@RequestBody UserSelectBo userSelectBo) {
         return userService.userSelect(userSelectBo,null
         );
@@ -95,7 +95,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "用户删除(单个，批量)", notes = "用户删除接口（单个，批量）")
-    @PutMapping("/userDelete")
+    @PostMapping("/userDelete")
     public Result userDelete(@RequestBody UserDeleteBo userDeleteBo) {
         return userService.userDelete(userDeleteBo.getIds()
         );

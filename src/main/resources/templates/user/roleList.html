@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>table模块快速使用</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<body>
+<form class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+        </div>
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="city" lay-verify="required">
+                <option value="请选择状态码"></option>
+                <option value="0">正常</option>
+                <option value="1">禁用</option>
+            </select>
+        </div>
+        <label class="layui-form-label">删除码</label>
+        <div class="layui-input-inline">
+            <select name="city" lay-verify="required">
+                <option value="请选择删除码"></option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal" id="search">查询</button>
+        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal">重置</button>
+    </div>
+</form>
+<div id="btn2" >
+    <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">
+        <i class="layui-icon" style="font-size: smaller" lay-event="batchDel">&#xe640;&nbsp批量删除</i>
+    </button>
+    <button type="button" class="layui-btn layui-btn-sm layui-btn-warm">
+        <i class="layui-icon" style="font-size: smaller" lay-event="batchDel">&#xe624;&nbsp新增</i>
+    </button>
+</div>
+<table id="demo" lay-filter="test"></table>
+
+<script type="textml" id="barDemo">
+<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" value="{{d.id}}" name="status" lay-skin="switch" lay-text="正常|禁用" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}>
+    <input type="hidden" id="id" value="${d.id }" />
+</script>
+<script src="/layui/layui.js"></script>
+<script src="/jquery/jquery-3.2.1.min.js"></script>
+<script>
+    layui.use(['table','jquery','layer','form'], function(){
+        var table = layui.table;
+        var $=layui.jquery;
+        var form=layui.form;
+        var layer=layui.layer;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            // , height: 312
+            , id: "tId" // 设置数据表格刷新的ID
+            , url: '/user/roleSelect' //数据接口
+            , method: 'post'
+            , contentType:'application/json'
+            // ,where: {number: 3, page: 1}
+            , page: true
+            //开启分页
+            , limit: 5, //每页显示多少条数
+            limits: [5, 10, 15], // 动态修改页容量
+            request: {
+                // 自定义获取分页数据的请求参数默认为page  limit
+                pageName: 'page',
+                limitName: 'number'
+            }
+            , parseData: function (b) {
+                console.log(b);
+                // alert("sfwestfgwe")
+                return {
+                    "code": b.code == 200 ? 0 : res.code,
+                    "msg": b.message,
+                    "data": b.date.returnDate,
+                    "count": b.date.paginationData.sum
+                }
+            }
+            , cols: [
+                [  //表头
+                    {checkbox: true, fixed: true}
+                    ,{field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    , {field: 'name', title: '用户名', width: 120, edit: 'text'}
+                    , {field: 'remark', title: '描述', width: 120, edit: 'text'}
+                    , {
+                    field: 'status', title: '状态', width: 120, templet: function (res) {
+                        return res.status == 0 ? '正常' : '禁用'
+                    }
+                }
+                    , {
+                    field: 'isDelete', title: '删除码', width: 120, templet: function (res) {
+                        return res.status == 0 ? '正常' : '禁用'
+                    }
+                }
+                    ,{field:'right', title: '操作',toolbar:"#barDemo",sort: true, fixed: 'right'}
+
+                ]
+            ]
+        });
+
+        //头部搜索重载
+        var $ = layui.$, active = {
+            reload: function(){
+                //执行重载
+                table.reload('tId', {	//testReload为table中的id
+                    method:'post',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        name:$('#name').val(),
+                        account:$('#account').val(),
+                        sex:$('#sex').val()
+                    }
+                });
+            }
+        };
+
+        $('#search').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+    //Demo
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>
