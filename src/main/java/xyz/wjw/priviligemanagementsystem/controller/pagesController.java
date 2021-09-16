@@ -33,23 +33,14 @@ public class pagesController {
     }
 
     @RequestMapping(value="/userList")
-    public String userList(){
-        return "user/userList";
-    }
+    public String userList(){ return "user/userList"; }
 
     @RequestMapping(value="/roleList")
-    public String roleList(){
-        return "user/roleList";
-    }
+    public String roleList(){ return "user/roleList"; }
 
-    @RequestMapping(value="/priviligeList")
+    @RequestMapping(value="/menuList")
     public String priviligeList(){
-        return "user/priviligeList";
-    }
-
-    @RequestMapping(value="/priviligeInfomation")
-    public String priviligeInfomation(){
-        return "user/priviligeInfomation";
+        return "menuList";
     }
 
     @RequestMapping(value="/updateUser")
@@ -57,8 +48,9 @@ public class pagesController {
         return "user/updateUser";
     }
 
-    @RequestMapping(value="/test")
-    public String test(){
-        return "test";
+    @RequestMapping(value="/userroleList")
+    public String userroleList(){
+        return "user/userroleList";
     }
+
 }

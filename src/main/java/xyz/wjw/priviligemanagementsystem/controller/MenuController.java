@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping(value="/user")
-public class PriviligeController {
+public class MenuController {
 
 
 }

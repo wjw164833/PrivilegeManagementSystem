@@ -78,8 +78,8 @@ public class UserImpl implements UserService {
             DataCheckUtils.isValid(PaginationUtils.isPagingParameters(number, page), "分页参数错误!");
         }
         //查询项目组评分 mybatis
-        List<Object> result = userMapper.userSelect(new UserSelectQuery(PaginationUtils.getPageIndex(page, number),number, id, userSelectBo.getAccount(),userSelectBo.getName(),
-                userSelectBo.getPassword(),userSelectBo.getSex(),userSelectBo.getMobile(),userSelectBo.getEmail(),
+        List<Object> result = userMapper.userSelect(new UserSelectQuery(PaginationUtils.getPageIndex(page, number),number, id,userSelectBo.getName(),
+                userSelectBo.getPassword(), userSelectBo.getAccount(),userSelectBo.getSex(),userSelectBo.getMobile(),userSelectBo.getEmail(),
                 userSelectBo.getDepId(),userSelectBo.getIsdeleted(),userSelectBo.getStatus()));
         if(id!=null) {
             int sum = ((List<Integer>) result.get(1)).get(0);
@@ -114,7 +114,7 @@ public class UserImpl implements UserService {
         user.setPassword(userSelectBo.getPassword());
         user.setEmail(userSelectBo.getEmail());
         user.setMobile(userSelectBo.getMobile());
-        user.setDepid(userSelectBo.getDepId());
+        user.setDepId(userSelectBo.getDepId());
         user.setSex(userSelectBo.getSex());
         user.setStatus(userSelectBo.getStatus());
         int row =userMapper.insert(user);
@@ -134,7 +134,7 @@ public class UserImpl implements UserService {
         user.setPassword(userSelectBo.getPassword());
         user.setEmail(userSelectBo.getEmail());
         user.setMobile(userSelectBo.getMobile());
-        user.setDepid(userSelectBo.getDepId());
+        user.setDepId(userSelectBo.getDepId());
         user.setSex(userSelectBo.getSex());
         user.setStatus(userSelectBo.getStatus());
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();

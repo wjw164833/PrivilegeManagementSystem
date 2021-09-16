@@ -10,27 +10,51 @@
 </head>
 <body>
 <!--加载模块-->
-<div class="layui-container">
-    <div style="height: 200px"></div>
-    <form class="layui-form " action="">
-        <div class="layui-row">
-            <div class="layui-col-md3 layui-col-md-offset1">
-                <!-- lay-verify="required" 数据验证   required（必填）-->
-                <input type="text" name="name" placeholder="请输用户名" autocomplete="off"
-                       class="layui-input ">
+<!--    <div style="height: 200px"></div>-->
+    <form class="layui-form ">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" placeholder="请输入用户名" autocomplete="off" class="layui-input">
             </div>
-            <div class="layui-col-md3 layui-col-md-offset1">
-                <input type="text" name="account" placeholder="请输账号" autocomplete="off"
-                       class="layui-input layui-col-md3">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="account" id="account" placeholder="请输入账号" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-inline">
+                <select name="sex" id="sex" >
+                    <option value=""></option>
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                </select>
             </div>
             <button class="layui-btn layui-col-md-offset1" lay-submit lay-filter="formDemo">查询</button>
             <button type="reset" class="layui-btn layui-btn-primary layui-col-md-offset1">重置</button>
         </div>
     </form>
-    <table id="demo" lay-filter="test"></table>
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+<div id="btn1" style="display:none;">
+    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">
+        <i class="layui-icon" style="font-size: smaller" lay-event="edit"> &#xe642;编辑</i>
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">
+        <i class="layui-icon" style="font-size: smaller" lay-event="del">&#xe640;删除</i>
+    </button>
+</div>
+<div id="btn2" style="display:none;">
+    <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">
+        <i class="layui-icon" style="font-size: smaller" lay-event="batchDel">&#xe640;&nbsp批量删除</i>
+    </button>
+    <button type="button" class="layui-btn layui-btn-sm layui-btn-warm">
+        <i class="layui-icon" style="font-size: smaller" lay-event="batchAdd">&#xe624;&nbsp新增</i>
+    </button>
 </div>
 
-
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" value="{{d.id}}" name="status" lay-skin="switch" lay-text="正常|禁用" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}>
+    <input type="hidden" id="id" value="${d.id }" />
+</script>
 <script type="text/javascript">
     layui.use(['table', 'form'], function () {
         var form = layui.form;
@@ -69,7 +93,7 @@
                 // headers: {token: 'sasasas'},
                 //发送数据类型
                 contentType: 'application/json',
-
+                toolbar: '#btn2',
                 page: true, // 是否开启分页
                 limit: 5, //每页显示多少条数
                 limits: [5, 10, 15], // 动态修改页容量
@@ -90,40 +114,29 @@
                     }
                 }
                 ,
-                cols: [ [// 数据表格的列设置
-                    {field: "name", title: "用户姓名", width: "14.2%", sort: true, style: "text-align:left;"},
-                    {field: "account", title: "账号", width: "14.2%", sort: true},
-                    {field: "mobile", title: "电话", width: "14.2%", sort: true},
-                    {field: "email", title: "邮箱", width: "14.2%", sort: true},
-                    {
-                        field: "sex", title: "性别", width: "14.2%", sort: true, templet: function (d) {
-                            console.log(d);
-                            if (d.sex == 0) {
-                                return '男';
-                            }
-                            ;
-                            if (d.sex == 1) {
-                                return '女';
-                            }
-                            ;
-                            if (d.sex == 2) {
-                                return '保密';
-                            }
-                        }
-                    },
-                    {
-                        field: "status", title: "状态", width: "14.2%", sort: true, templet: function (d) {
-                            return d.status == 1 ? '正常' : '禁用';
-                        }
-                    },
-                    {
-                        title: "操作", width: "15.5%", align: "center", templet: function (d) {
-                            var str = "<button type='button' class='layui-btn layui-btn-xs layui-btn-danger' lay-event='del'>删除</button>";
-                            str += "<button type='button' class='layui-btn layui-btn-xs layui-btn-warm' lay-event='edit'>更新</button>";
-                            return str;
+                cols: [
+                    [  //表头
+                        {checkbox: true, fixed: true}
+                        , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                        , {field: 'name', title: '用户名', width: 120, edit: 'text'}
+                        , {field: 'depId', title: '部门', width: 120, edit: 'text'}
+                        , {
+                        field: 'email', title: '邮箱', width: 150, edit: 'text', templet: function (res) {
+                            return '<em>' + res.email + '</em>'
                         }
                     }
-                ] ]
+                        , {field: 'account', title: '账号', width: 80, sort: true}
+                        , {
+                        field: 'sex', title: '性别', width: 80, templet: function (res) {
+                            return res.sex == 0 ? '男' : '女'
+                        }
+                    }
+                        , {field: 'mobile', title: '电话', width: 100, edit: 'text'}
+                        , {field: 'status', title: '账号状态', width: 92, templet: '#switchTpl', align: 'center'}
+                        , {field: 'right', title: '操作', toolbar: "#btn1", sort: true, fixed: 'right'}
+
+                    ]
+                ]
             });
         };
     });

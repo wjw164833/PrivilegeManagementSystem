@@ -34,6 +34,9 @@
       <if test="account!=null and account!=''">
         and account LIKE "%"#{account}"%"
       </if>
+      <if test="sex!=null and sex!=''">
+        and sex = {#sex}
+      </if>
     </where>
     order by id
     LIMIT ${pageIndex},${pageSize};
