@@ -18,6 +18,10 @@ public interface UserMapper extends BaseMapper<User> {
 
     int userDelete(List<String> ids);
 
+    int on (User user);
+
+    int off (User user);
+
     @Select("select * from sys_user where name=#{username}")
     User selectByUserName(String username);
 }

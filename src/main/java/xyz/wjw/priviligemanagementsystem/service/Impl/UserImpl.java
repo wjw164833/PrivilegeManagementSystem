@@ -150,11 +150,11 @@ public class UserImpl implements UserService {
     @Override
     public Result userDelete(@NonNull List<String> ids) {
         int row =userMapper.userDelete(ids);
-        //判断插入结果
+        //判断删除结果
         if (row == 0) {
             return Result.error("删除用户失败");
         }
-        return Result.success();
+        return Result.success(row);
     }
 
     @Override
@@ -175,6 +175,17 @@ public class UserImpl implements UserService {
         }
         return Result.success(user);
     }
+
+    //修改用户状态
+    @Override
+    public int userStatus (User user){
+        if(user.getStatus().equals("0")){
+            return userMapper.off(user);
+        }else {
+            return userMapper.on(user);
+        }
+    }
+
 
     //登出
     @Override

@@ -56,11 +56,11 @@
     <input type="hidden" id="id" value="${d.id }" />
 </script>
 <script type="text/javascript">
-    layui.use(['table', 'form'], function () {
+    layui.use(['table', 'form','jquery'], function () {
         var form = layui.form;
         var table = layui.table;
-        // var layer = layui.layer;
-        // var $ = layui.jquery;
+        var layer = layui.layer;
+        var $ = layui.jquery;
         var name = null;
         var mobile = null;
         //获取查询数据
@@ -70,13 +70,14 @@
             name = data.field.name;
             account = data.field.account;
 
-            console.log("+++fghdh"+name + account);
+            console.log("+++fghdh" + name + account);
             //调用
-            sxym(name,account);
+            sxym(name, account);
             return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
         });
         //调用
         sxym();
+
         //请求封装
         function sxym(name, account) {
             /*   获取用户列表 */
@@ -139,7 +140,251 @@
                 ]
             });
         };
+
+        //修改状态switch
+        form.on('switch(status)', function (data) {
+            // 得到开关的value值，需要修改的ID值。
+            var id = data.value;
+            var status = this.checked ? '1' : '0';
+            alert(id+"++"+status);
+            $.ajax({
+                type: 'POST',
+                url: '/user/userStatus',
+                data: {"id": id, "status": status},
+                error: function (data) {
+                    console.log(data);
+                    layer.msg('数据异常，操作失败！');
+                },
+                success: function (data) {
+                    if (data = 1) {
+                        setTimeout(function () {
+                            layer.msg('操作成功！');
+                        }, 100);
+                        $(".layui-icon-refresh").click();
+                    } else {
+                        console.log(data);
+                        layer.msg('数据异常，操作失败！');
+                    }
+                },
+                dataType: 'JSON'
+            });
+        });
+
+
+        //监听toolbar
+        table.on('toolbar(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'batchDel') {
+                //layer.msg("批量删除操作");
+                var checkStatus = table.checkStatus('tId');
+                if (checkStatus.data.length == 0) {
+                    layer.msg('请先选择要删除的数据行！', {icon: 2, time: 1100});
+                    return;
+                }
+                var id = "";
+                for (var i = 0; i < checkStatus.data.length; i++) {
+                    id += checkStatus.data[i].id + ",";
+                }
+                layer.confirm("确定要删除所选数据？删除后无法恢复！", {icon: 3, title: "提示"}, function () {
+                    $.ajax({
+                        type: "GET",
+                        url: '/user/userDelete',
+                        data: {"ids": id},
+                        success: function (data) {
+                            if (data.code == 200) {
+                                location.reload();
+                                layer.msg('删除成功', {
+                                    icon: 6,
+                                    time: 1500
+                                });
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                                layer.close(index);
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            layer.msg('删除失败！');
+                        },
+
+                    });
+                });
+            }
+
+        });
+
+        //监听工具条
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的要删除所选数据？删除后无法恢复！', {icon: 3, title: "提示"}, function (index) {
+                    $.ajax({
+                        url: "/user/userDelete",
+                        type: "GET",
+                        data: {"ids": data.id},
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.code == 200) {
+                                obj.del();
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            layer.msg('删除失败！');
+                        },
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                window.userData = data;
+                let index = layer.open({
+                    type: 2,
+                    anim: 0,
+                    title: '编辑信息',
+                    scrollbar: false,
+                    area: ['100%', '100%'],
+                    content: '/user/userUpdate',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
+
+                        /* 动态赋值下拉框*/
+                        var depid = data.depid;
+                        var sex = data.sex;
+                        if (sex == '0') {
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
+                        } else if (sex == '1') {
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("女"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
+                        } else {
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("保密"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
+                        }
+                        //动态添加部门
+                        $.post("findAllDept", function (data) {
+                            $.each(data, function (index, item) {
+                                if (item.id == depid) {
+                                    //console.log(item.name);
+                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).attr("selected", "selected").text(item.name));
+                                } else {
+                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).text(item.name));
+                                }
+                            });
+                            iframeWin.layui.form.render("select");
+                        }, 'json');
+
+                        //动态添加角色
+                        var id = data.id;
+                        $.post("findAllRole1?id=" + id, function (data) {
+                            $.each(data, function (index, item) {
+                                console.log(item.name);
+                                if (item.hasRight)
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id).attr("checked", "checked"));
+                                else
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id));
+                            });
+                            iframeWin.layui.form.render();
+                        }, 'json')
+
+                    },
+                });
+            }
+        });
     });
+
+        // //监听行工具事件
+        // table.on('tool(test)', function(obj) {
+        //     var data = obj.data;
+        //     // console.log(data)
+        //     if (obj.event === 'del') {
+        //         layer.confirm('真的删除行么', function (index) {
+        //
+        //             layui.use(["jquery","layer"],function (){
+        //                 // console.log(data)
+        //                 var $ = layui.$;
+        //                 var layer = layui.layer;
+        //                 $.ajax({
+        //                     url:"/user/userDelete",
+        //                     type:"post",
+        //                     data:JSON.stringify(data),
+        //                     contentType:"application/json;charset=UTF-8",
+        //                     dataType:"json",
+        //                     success:function (date) {
+        //                         if (date>0){
+        //                             alert("成功了")
+        //                         }else {
+        //                             alert("失败了")
+        //                         }
+        //                     }
+        //                 })
+        //             })
+        //
+        //             obj.del();
+        //             layer.close(index);
+        //         });
+        //     } else if (obj.event === 'edit') {
+        //         layui.use(["jquery","layer"],function (){
+        //             // console.log(data)
+        //             var $ = layui.$;
+        //             var layer = layui.layer;
+        //             $.ajax({
+        //                 url:"/user/userUpdate",
+        //                 type:"post",
+        //                 data:JSON.stringify(data),
+        //                 contentType:"application/json;charset=UTF-8",
+        //                 dataType:"json",
+        //                 success:function (date) {
+        //                     if (date>0){
+        //                         alert("修改失败")
+        //                     }else {
+        //                         alert("修改成功")
+        //                         sxym();
+        //                     }
+        //                 }
+        //             })
+        //         })
+
+                // layer.prompt({
+                //     formType: 2
+                //     , value: data.email
+                // }, function (value, index) {
+                //     obj.update({
+                //         email: value
+                //     });
+                //     layer.close(index);
+                // });
+    //         } else if (obj.event === 'forbidden'||'startusing') {
+    //             layui.use(["jquery","layer"],function (){
+    //                 // console.log(data)
+    //                 var $ = layui.$;
+    //                 var layer = layui.layer;
+    //                 $.ajax({
+    //                     url:"/user/userStatus",
+    //                     type:"post",
+    //                     data:JSON.stringify(data),
+    //                     contentType:"application/json;charset=UTF-8",
+    //                     dataType:"json",
+    //                     success:function (date) {
+    //                         if (date>0){
+    //                             alert("成功了")
+    //                             location.reload();
+    //                         }else {
+    //                             alert("失败了")
+    //                         }
+    //                     }
+    //                 })
+    //             })
+    //         }
+    //     });
+    //
+    // });
 
 </script>
 </body>

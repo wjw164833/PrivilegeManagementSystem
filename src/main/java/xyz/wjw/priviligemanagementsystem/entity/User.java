@@ -22,6 +22,8 @@ public class User implements Serializable {
 
     private String name;
 
+    @ApiModelProperty(value = "部门Id")
+    @TableField("depId")
     private String depId;
 
     private String account;

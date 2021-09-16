@@ -11,7 +11,7 @@ function register() {
         maxmin:true,//最大最小化。
         shadeClose: true,//是否点击遮罩关闭
         area: ['35%', '80%'],//宽高
-        content: '/register',
+        content: '/register'
     });
 }
 
@@ -24,13 +24,13 @@ layui.use(['layer', 'form',], function (data) {
     form.on('submit(login)', function () {
         $.ajax({
             type: "POST",
-            url: 'user/tologin',
+            url: 'user/login',
             data: {
                 account:$('#account').val(),
                 password:$('#password').val()
             },
             success: function (res) {
-                if (res.flag==="true") {
+                if (res.code==200) {
                     // 提示语
                     layer.msg('登录成功', {
                         icon: 1,

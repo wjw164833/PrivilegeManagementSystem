@@ -38,4 +38,6 @@ public interface UserService {
     Result getUserDate(String id);
 
     Result loginout(String id);
+
+    int userStatus(User user);
 }

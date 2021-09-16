@@ -50,4 +50,14 @@
     </foreach>
     )
   </delete>
+
+  <update id="on" parameterType="xyz.wjw.priviligemanagementsystem.entity.User">
+    update sys_user set status=0 where id=#{id}
+  </update>
+
+  <update id="off" parameterType="xyz.wjw.priviligemanagementsystem.entity.User">
+    update sys_user set status=1 where id=#{id}
+  </update>
+
+
 </mapper>

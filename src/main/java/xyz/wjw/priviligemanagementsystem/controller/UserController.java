@@ -86,18 +86,26 @@ public class UserController {
     }
 
     @ApiOperation(value = "用户修改", notes = "用户修改接口")
-    @PutMapping("/userUpdate")
+    @PostMapping("/userUpdate")
     public Result userUpdate(@RequestBody UserSelectBo userSelectBo) {
         return userService.userUpdate(userSelectBo
         );
     }
 
     @ApiOperation(value = "用户删除(单个，批量)", notes = "用户删除接口（单个，批量）")
-    @PostMapping("/userDelete")
-    public Result userDelete(@RequestBody UserDeleteBo userDeleteBo) {
+    @GetMapping("/userDelete")
+    @ResponseBody
+    public Result userDelete(UserDeleteBo userDeleteBo) {
         return userService.userDelete(userDeleteBo.getIds()
         );
     }
+
+    @ApiOperation(value = "修改用户状态", notes = "修改用户状态接口")
+    @PostMapping("/userStatus")
+    public int userStatus(User user){
+        return userService.userStatus(user);
+    }
+
 
     @ApiOperation(value = "登出", notes = "登出")
     @PutMapping("/loginout")

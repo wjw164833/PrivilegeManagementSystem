@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+</head>
+<style>
+    .layui-table-cell {
+        height: auto !important;
+        white-space: normal;
+    }
+    .layui-table-cell, .layui-table-tool-panel li {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+<body>
+<form class="layui-form" action="" id="myForm" method="post" lay-filter="" style="margin-top: 10px;margin-bottom: 0">
+            <div class="layui-input-inline" style="margin-left: 10px;width: 16%">
+                <select name="sex" id="sex">
+                    <option value="">请选择性别</option>
+                    <option value="0">男</option>
+                    <option value="1">女</option>
+                    <option value="2">保密</option>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 16%" >
+                <select name="status" id="status">
+                    <option value="">请选择状态</option>
+                    <option value="0">正常</option>
+                    <option value="1">禁用</option>
+                </select>
+            </div>
+            <div class="layui-inline" style="width: 16%">
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" autocomplete="off" class="layui-input" placeholder="请输入姓名">
+                </div>
+            </div>
+            <div class="layui-inline" >
+                <button type="button" data-type="reload" class="layui-btn layui-btn-sm layui-btn-normal" id="search">
+                    <i class="layui-icon" style="font-size: 8px">&#xe615;</i>查询
+                </button>
+            </div>
+</form>
+<!-- 工具集 -->
+<table class="layui-hide" id="LAY_table_user" lay-filter="useruv" style="margin-top: 0"></table>
+<div id="btn1" style="display:none;">
+    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">
+        <i class="layui-icon" style="font-size: smaller" lay-event="edit"> &#xe642;<span style="font-size: 6px">编辑</span></i>
+    </button>
+    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">
+        <i class="layui-icon" style="font-size: smaller" lay-event="del">&#xe640;<span style="font-size: 6px">删除</span></i>
+    </button>
+</div>
+<div id="btn2" style="display:none;">
+    <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" style="margin-left: 0">
+        <i class="layui-icon" lay-event="batchDel">&#xe640;&nbsp<span style="font-size: 8px">批量删除</span></i>
+    </button>
+</div>
+<script type="text/html" id="switchTpl">
+            <input type="checkbox" value="{{d.id}}" name="status" lay-skin="switch" lay-text="正常|禁用" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}>
+            <input type="hidden"  value="${d.id }" />
+</script>
+<script type="text/html" id="switchTpl1">
+    <input type="checkbox"  value="{{d.id}}" name="isdeleted" lay-skin="switch" lay-text="是|否" lay-filter="isdeleted" {{ d.isdeleted == 1 ? 'checked' : '' }}>
+    <input type="hidden"  value="${d.id }" />
+</script>
+<script src="/layui/layui.js"></script>
+<script src="/jquery/jquery-3.2.1.min.js"></script>
+<script th:inline="javascript">
+    layui.use(['table','jquery','layer','form'], function(){
+        var table = layui.table;
+        var $=layui.jquery;
+        var form=layui.form;
+        var layer=layui.layer;
+
+        //方法级渲染
+        table.render({
+            elem: '#LAY_table_user'
+            ,url: '/findAllUser'
+            ,toolbar: '#btn2'
+            ,even:true
+            ,cols: [
+                [
+                    {checkbox: true, fixed: true}
+                    ,{field:'id', title: 'ID', width:60, sort: true, fixed: true,align: 'center'}
+                    ,{field:'depid', title: '部门ID',align: 'center',width:80,hide:true}
+                    ,{field:'name', title: '姓名', width:80,align: 'center'}
+                    ,{field:'account', title: '登录账号', width:90,align: 'center'}
+                    ,{field:'dname', title: '部门', width:90,align: 'center'}
+                    ,{field:'sex', title: '性别', width:70,align: 'center',
+                        templet:function(data){if(data.sex=='0'){return ' <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">\n' +
+                        '        <i class="layui-icon" style="font-size:5px;margin: auto"> 男</i>\n' +
+                        '    </button>'}else if(data.sex=='1'){return '    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">\n' +
+                        '        <i class="layui-icon" style="font-size: 5px;margin: auto">女</i>\n' +
+                        '    </button>'}else{return '    <button type="button" class="layui-btn layui-btn-warm layui-btn-xs">\n' +
+                        '        <i class="layui-icon" style="font-size: 5px;margin: auto">保密</i>\n' +
+                        '    </button>'}}}
+                    ,{field:'email', title: '邮箱', width:140}
+                    ,{field:'mobile', title: '电话', width:120,align: 'center'}
+                    ,{field:'status', title: '账号状态', width:92,templet:'#switchTpl',align:'center'}
+                    ,{field:'isdeleted', title: '是否可删除', width:102,templet:'#switchTpl1',align:'center'}
+                    ,{field:'right', title: '操作', width:180,toolbar:"#btn1",sort: true, fixed: 'right'}
+                ]
+            ]
+            ,id: 'testReload'
+            ,page: true
+            ,height: 420
+            ,page: {
+                layout: ['refresh','prev', 'page', 'next', 'skip', 'count', 'limit']
+            }
+            ,limit: 10
+            ,loading: true
+            ,limits:[7,13,20,30]
+        });
+
+        //获取所有部门，动态添加选择
+        var deptid=$("#deptid");//查询
+        $.post("findAllDept",function(data){
+            var str = "";
+            for(i in data){
+                str = "<option value='"+data[i].id+"'>"+data[i].name+"</option>";
+                deptid.append(str);
+                form.render('select');
+            }
+        },'json');
+
+        //修改状态switch
+        form.on('switch(status)', function(data){
+        // 得到开关的value值，需要修改的ID值。
+            var id = data.value;
+            var status = this.checked ? '1' : '0';
+            //alert(id+"++"+status);
+            $.ajax({
+                type: 'POST',
+                url: '/changeStatus',
+                data: {"id" :id,"status":status},
+                error: function(data){
+                    console.log(data);
+                    layer.msg('数据异常，操作失败！');
+                },
+                success: function(data){
+                    if(data.flag=="true"){
+                        setTimeout(function(){
+                            layer.msg('操作成功！');},100);
+                            $(".layui-icon-refresh").click();
+                    }else{
+                        console.log(data);
+                        layer.msg('数据异常，操作失败！');
+                    }},
+                dataType:'JSON'
+            });
+        });
+
+        //修改isdeleted
+        form.on('switch(isdeleted)', function(data){
+            // 得到开关的value值，需要修改的ID值。
+            var id = data.value;
+            var isdeleted = this.checked ? '0' : '1';
+            //layer.msg(id+"++"+isdeleted);
+            $.ajax({
+                type: 'POST',
+                url: '/changeisDeleted',
+                data: {"id" :id,"isdeleted":isdeleted},
+                error: function(data){
+                    console.log(data);
+                    layer.msg('数据异常，操作失败！');
+                },
+                success: function(data){
+                    if(data.flag=="true"){
+                        setTimeout(function(){
+                            layer.msg('操作成功！');},100);
+                        $(".layui-icon-refresh").click();
+                    }else{
+                        console.log(data);
+                        layer.msg('数据异常，操作失败！');
+                    }},
+                dataType:'JSON'
+            });
+        });
+
+        //监听toolbar
+        table.on('toolbar(useruv)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'batchDel'){
+                //layer.msg("批量删除操作");
+                var checkStatus = table.checkStatus('testReload');
+                if(checkStatus.data.length==0){
+                    parent.layer.msg('请先选择要删除的数据行！', {icon: 2,time: 1100});
+                    return ;
+                }
+                var id= "";
+                for(var i=0;i<checkStatus.data.length;i++){
+                    id += checkStatus.data[i].id+",";
+                }
+                layer.confirm("确定要删除所选数据？删除后无法恢复！",{ icon: 3, title: "提示" },function(){
+                    $.ajax({
+                        type:"POST",
+                        url: '/delAllUser',
+                        data:{"ids":id},
+                        success:function (data) {
+                            if(data==="true"){
+                                location.reload();
+                                layer.msg('删除成功', {
+                                    icon: 6,
+                                    time: 1500
+                                });
+                            }else{
+                                layer.msg("删除失败", {icon: 5});
+                                layer.close(index);
+                            }
+                        },
+                        error: function(data){
+                            console.log(data);
+                            layer.msg('删除失败！');
+                        },
+
+                    })
+                })
+            }
+        });
+
+        //监听工具条
+        table.on('tool(useruv)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('真的要删除所选数据？删除后无法恢复！',{ icon: 3, title: "提示" }, function (index) {
+                    console.log(data);
+                    $.ajax({
+                        url: "/userDel",
+                        type: "POST",
+                        data: {"id": data.id},
+                        dataType: "json",
+                        success: function (data) {
+                            if (data) {
+                                obj.del();
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        },
+                        error: function(data){
+                            console.log(data);
+                            layer.msg('删除失败！');
+                        },
+                    });
+                });
+            }else if(obj.event === 'edit'){
+                window.userData=data;
+                let index=layer.open({
+                    type: 2,
+                    anim:0,
+                    title: '编辑信息',
+                    scrollbar: false,
+                    area: ['100%','100%'],
+                    content : '/updateUser',
+                    success : function(layero,index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
+
+                       /* 动态赋值下拉框*/
+                        var depid=data.depid;
+                        var sex=data.sex;
+                        if(sex=='0'){
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",sex).attr("selected","selected").text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",1).text("女"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",2).text("保密"));
+                        }else if(sex=='1'){
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",sex).attr("selected","selected").text("女"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",0).text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",2).text("保密"));
+                        }else {
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",sex).attr("selected","selected").text("保密"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",0).text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value",1).text("女"));
+                        }
+                        //动态添加部门
+                        $.post("findAllDept",function(data){
+                            $.each(data, function(index, item) {
+                                if (item.id == depid) {
+                                    //console.log(item.name);
+                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value",item.id).attr("selected","selected").text(item.name));
+                                }else{
+                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value",item.id).text(item.name));
+                                }
+                            });
+                            iframeWin.layui.form.render("select");
+                        },'json');
+
+                        //动态添加角色
+                        var id=data.id;
+                        $.post("findAllRole1?id="+id,function(data){
+                            $.each(data, function(index, item) {
+                                console.log(item.name);
+                                if(item.hasRight)
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title",item.name).attr("name","role").attr("value",item.id).attr("checked","checked"));
+                                else
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title",item.name).attr("name","role").attr("value",item.id));
+                            });
+                            iframeWin.layui.form.render();
+                        },'json')
+
+                    },
+                });
+            }
+        });
+        //头部搜索重载
+        var $ = layui.$, active = {
+            reload: function(){
+                //执行重载
+                table.reload('testReload', {	//testReload为table中的id
+                    method:'post',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        name:$('#name').val(),
+                        sex:$('#sex').val(),
+                        status:$('#status').val()
+                    }
+                });
+            }
+        };
+
+        $('#search').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

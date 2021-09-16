@@ -24,7 +24,7 @@ public class pagesController {
 
     @RequestMapping(value="/register")
     public String register(){
-        return "register";
+        return "user/register";
     }
 
     @RequestMapping(value="/welcome")

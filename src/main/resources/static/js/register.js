@@ -42,7 +42,7 @@ layui.use(['form','layer','jquery'],function (){
 
     form.on('submit(register)', function(data){
         $.ajax({
-            url:'/user/register',
+            url:'/user/userAdd',
             data:data.field,
             type:'post',//返回数据格式,
             dataType: "json",
