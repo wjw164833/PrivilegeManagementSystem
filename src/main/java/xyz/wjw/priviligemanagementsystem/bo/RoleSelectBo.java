@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class RoleSelectBo {
+    @ApiModelProperty(value = "页码")
+    private int page;
+    @ApiModelProperty(value = "每页记录条数")
+    private int number;
     @ApiModelProperty(value = "角色ID")
     private String id;
 
@@ -14,11 +18,8 @@ public class RoleSelectBo {
 
     private String remark;
 
+    private String isdeleted;
+
     private String status;
 
-    private String isdeleted;
-    @ApiModelProperty(value = "页码")
-    private int page;
-    @ApiModelProperty(value = "每页记录条数")
-    private int number;
 }

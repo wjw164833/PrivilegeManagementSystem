@@ -10,26 +10,24 @@
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-inline">
-            <input type="text" name="title" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+            <input type="text" name="name"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
         </div>
         <label class="layui-form-label">状态</label>
         <div class="layui-input-inline">
-            <select name="city" lay-verify="required">
-                <option value="请选择状态码"></option>
+            <select name="status" lay-verify="required">
                 <option value="0">正常</option>
                 <option value="1">禁用</option>
             </select>
         </div>
         <label class="layui-form-label">删除码</label>
         <div class="layui-input-inline">
-            <select name="city" lay-verify="required">
-                <option value="请选择删除码"></option>
-                <option value="0">否</option>
-                <option value="1">是</option>
+            <select name="isdeleted" lay-verify="required">
+                <option value="0">正常</option>
+                <option value="1">禁用</option>
             </select>
         </div>
-        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal" id="search">查询</button>
-        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal">重置</button>
+        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal" id="search" lay-submit lay-filter="form1Demo">查询</button>
+        <button type="reset" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal">重置</button>
     </div>
 </form>
 <div id="btn2" >
@@ -58,70 +56,85 @@
         var $=layui.jquery;
         var form=layui.form;
         var layer=layui.layer;
-
-        //第一个实例
-        table.render({
-            elem: '#demo'
-            // , height: 312
-            , id: "tId" // 设置数据表格刷新的ID
-            , url: '/user/roleSelect' //数据接口
-            , method: 'post'
-            , contentType:'application/json'
-            // ,where: {number: 3, page: 1}
-            , page: true
-            //开启分页
-            , limit: 5, //每页显示多少条数
-            limits: [5, 10, 15], // 动态修改页容量
-            request: {
-                // 自定义获取分页数据的请求参数默认为page  limit
-                pageName: 'page',
-                limitName: 'number'
-            }
-            , parseData: function (b) {
-                console.log(b);
-                // alert("sfwestfgwe")
-                return {
-                    "code": b.code == 200 ? 0 : res.code,
-                    "msg": b.message,
-                    "data": b.date.returnDate,
-                    "count": b.date.paginationData.sum
-                }
-            }
-            , cols: [
-                [  //表头
-                    {checkbox: true, fixed: true}
-                    ,{field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                    , {field: 'name', title: '用户名', width: 120, edit: 'text'}
-                    , {field: 'remark', title: '描述', width: 120, edit: 'text'}
-                    , {
-                    field: 'status', title: '状态', width: 120, templet: function (res) {
-                        return res.status == 0 ? '正常' : '禁用'
-                    }
-                }
-                    , {
-                    field: 'isDelete', title: '删除码', width: 120, templet: function (res) {
-                        return res.status == 0 ? '正常' : '禁用'
-                    }
-                }
-                    ,{field:'right', title: '操作',toolbar:"#barDemo",sort: true, fixed: 'right'}
-
-                ]
-            ]
+        var name=null;
+        var status=null;
+        var isdeleted=null;
+        form.on('submit(form1Demo)', function (data) {
+            //alert(data.field.name);
+            name = data.field.name;
+            status = data.field.status;
+            isdeleted = data.field.isdeleted;
+            console.log("+++fghdh"+name +status+isdeleted);
+            //调用
+            search(name,status,isdeleted);
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
         });
+        search();
+        //第一个实例
+        function search(name,status,isdeleted) {
+            table.render({
+                elem: '#demo'
+                // , height: 312
+                , id: "tId" // 设置数据表格刷新的ID
+                , url: '/user/roleSelect' //数据接口
+                , method: 'post'
+                , contentType:'application/json'
+                ,where: {name: name, status: status,isdeleted:isdeleted}
+                , page: true
+                //开启分页
+                , limit: 5, //每页显示多少条数
+                limits: [5, 10, 15], // 动态修改页容量
+                request: {
+                    // 自定义获取分页数据的请求参数默认为page  limit
+                    pageName: 'page',
+                    limitName: 'number'
+                }
+                , parseData: function (b) {
+                    console.log(b);
+                    // alert("sfwestfgwe")
+                    return {
+                        "code": b.code == 200 ? 0 : res.code,
+                        "msg": b.message,
+                        "data": b.date.returnDate,
+                        "count": b.date.paginationData.sum
+                    }
+                }
+                , cols: [
+                    [  //表头
+                        {checkbox: true, fixed: true}
+                        ,{field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                        , {field: 'name', title: '用户名', width: 120, edit: 'text'}
+                        , {field: 'remark', title: '描述', width: 120, edit: 'text'}
+                        , {
+                        field: 'status', title: '状态', width: 120, templet: function (res) {
+                            return res.status == 0 ? '正常' : '禁用'
+                        }
+                    }
+                        , {
+                        field: 'isDelete', title: '删除码', width: 120, templet: function (res) {
+                            return res.status == 0 ? '正常' : '禁用'
+                        }
+                    }
+                        ,{field:'right', title: '操作',toolbar:"#barDemo",sort: true, fixed: 'right'}
+
+                    ]
+                ]
+            });
+        }
 
         //头部搜索重载
         var $ = layui.$, active = {
             reload: function(){
                 //执行重载
-                table.reload('tId', {	//testReload为table中的id
+                table.reload('demo', {	//testReload为table中的id
                     method:'post',
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
                     ,where: {
                         name:$('#name').val(),
-                        account:$('#account').val(),
-                        sex:$('#sex').val()
+                        status:$('#status').val(),
+                        isdeleted:$('#isdeleted').val()
                     }
                 });
             }
@@ -139,7 +152,7 @@
         var form = layui.form;
 
         //监听提交
-        form.on('submit(formDemo)', function (data) {
+        form.on('submit(form1Demo)', function (data) {
             layer.msg(JSON.stringify(data.field));
             return false;
         });

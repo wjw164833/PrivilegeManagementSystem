@@ -146,7 +146,7 @@
             // 得到开关的value值，需要修改的ID值。
             var id = data.value;
             var status = this.checked ? '1' : '0';
-            alert(id+"++"+status);
+            // alert(id+"++"+status);
             $.ajax({
                 type: 'POST',
                 url: '/user/userStatus',

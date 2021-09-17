@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="xyz.wjw.priviligemanagementsystem.mapper.MenuMapper">
+<mapper namespace="xyz.wjw.priviligemanagementsystem.mapper.MenuMapper" >
+
+    <select id="selectMenu" parameterType="String" resultType="xyz.wjw.priviligemanagementsystem.entity.Menu">
+        select * from sys_menu where isDeleted = 0
+    </select>
+
+
+    <resultMap id="SelectMenuVo" type="xyz.wjw.priviligemanagementsystem.vo.SelectMenuVo"></resultMap>
+
+    <select id="menuSelect" resultMap="SelectMenuVo">
+        SELECT
+        a.*, b.roleId
+        FROM
+        sys_menu a
+        left join role_menu b on a.id=b.menuId
+        <where>
+            a.isDeleted = 0
+            <if test="name!=null and name!=''">
+             and  a.`name` LIKE "%"#{name}"%"
+            </if>
+        </where>
+        order by a.parentId,a.sortCode
+    </select>
+
+    <delete id="menuDelete">
+        delete from sys_menu where id in(
+        <foreach collection="ids" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
 
 </mapper>

@@ -23,7 +23,7 @@ public class RoleImpl implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;
-    
+
 
     @Override
     public Result roleSelect(RoleSelectBo roleSelectBo, String id) {
@@ -35,6 +35,7 @@ public class RoleImpl implements RoleService {
             //分页参数是否正确
             DataCheckUtils.isValid(PaginationUtils.isPagingParameters(number, page), "分页参数错误!");
         }
+        System.out.println(roleSelectBo.getName()+" "+roleSelectBo.getStatus()+" "+roleSelectBo.getIsdeleted()+roleSelectBo.getNumber());
         //查询项目组评分 mybatis
         List<Object> result = roleMapper.roleSelect(new RoleSelectQuery(PaginationUtils.getPageIndex(page, number),number, id,roleSelectBo.getName(),
                 roleSelectBo.getRemark(),roleSelectBo.getIsdeleted(),roleSelectBo.getStatus()));

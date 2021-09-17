@@ -40,7 +40,7 @@ public class pagesController {
 
     @RequestMapping(value="/menuList")
     public String priviligeList(){
-        return "menuList";
+        return "user/menuList";
     }
 
     @RequestMapping(value="/updateUser")
@@ -53,4 +53,8 @@ public class pagesController {
         return "user/userroleList";
     }
 
+    @RequestMapping(value="/addMenu")
+    public String addMenu(){
+        return "menu/addMenu";
+    }
 }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>登录</title>
+  <link rel="stylesheet" href="/layui/css/layui.css">
+  <style>
+
+    form{
+      margin-left: 10px;
+    }
+    input{
+      max-width: 300px;
+    }
+    .login_rem a{
+      color: #FD5353;
+    }
+    .login_line8 button{
+      width: 90%;
+      background-color: #5FB878;
+      margin-left: 4%;
+      margin-bottom: 3%;
+    }
+    .layui-form-checked[lay-skin=primary] i{
+      border-color:#FD5353 !important;
+    }
+    .layui-form-checked i, .layui-form-checked:hover i{
+      background-color:  #FD5353 !important;
+    }
+    .layui-form-item{
+      margin-bottom: 20px;
+    }
+
+  </style>
+
+</head>
+<body>
+<div class="layui-row">
+  <form class="layui-form layui-form-pane">
+    <div class="layui-form-item" style="margin-top: 5px">
+      <label class="layui-form-label">
+        <i class="layui-icon layui-icon-tabs"></i></label>
+      <div class="layui-input-block">
+        <input type="text" name="name" lay-verify="name" class="layui-input"
+               placeholder="请输入菜单名称"/>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label"><i
+              class="layui-icon layui-icon-link"></i></label>
+      <div class="layui-input-block">
+        <input type="text" name="appImg" id="appImg" lay-verify="appImg" class="layui-input"
+               placeholder="请输入程序路径"/>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label"><i
+              class="layui-icon layui-icon-link"></i></label>
+      <div class="layui-input-block">
+        <input type="text" name="imgUrl" lay-verify="imgUrl" class="layui-input" placeholder="请输入菜单路径"/>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label"><i class="layui-icon layui-icon-form"></i></label>
+      <div class="layui-input-block">
+        <select name="type">
+          <option value="">请选择类型（0菜单，1按钮）</option>
+          <option value="0">菜单</option>
+          <option value="1">按钮</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <i class="layui-icon layui-icon-fonts-code"></i></label>
+      <div class="layui-input-block">
+        <input type="text" name="sortCode" lay-verify="sortCode" class="layui-input" placeholder="请输入排序码"/>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">
+        <i class="layui-icon layui-icon-component"></i></label>
+      <div class="layui-input-block">
+        <input type="text" name="parentId" lay-parentid="parentId" class="layui-input" placeholder="请输入上级菜单id"/>
+      </div>
+    </div>
+    <div class="layui-button-inline login_line8">
+      <button class="layui-btn" lay-submit="" lay-filter="register">增加</button>
+    </div>
+
+  </form>
+</div>
+<script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+<script src="/layui/layui.js"></script>
+<script>
+  layui.use(['form','layer','jquery'],function (){
+    var form =layui.form;
+    var $ = layui.jquery;
+    var layer=layui.layer;
+    form.render();
+    form.verify({
+
+    form.on('submit(register)', function(data){
+      $.ajax({
+        url:'/user/userAdd',
+        data:data.field,
+        type:'post',//返回数据格式,
+        dataType: "json",
+        success:function(data){
+          console.log("___________测试______________");
+          if(data.flag==="true"){
+
+            // 延迟3秒
+            setTimeout(function () {
+              //先得到当前iframe层的索引
+              var index = parent.layer.getFrameIndex(window.name);
+              //再执行关闭
+              parent.layer.close(index);
+            }, 2000);
+
+            return false;
+          }
+        },
+        error: function () {
+          layer.msg(data.errMesage, {icon: 2, anim: 6});
+        }
+      });
+    });
+
+  })
+</script>
+</body>
+</html>
