@@ -8,7 +8,7 @@
 <body>
 <form class="layui-form">
     <div class="layui-form-item">
-        <label class="layui-form-label">用户名</label>
+        <label class="layui-form-label">角色</label>
         <div class="layui-input-inline">
             <input type="text" name="name"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
         </div>
@@ -103,7 +103,7 @@
                     [  //表头
                         {checkbox: true, fixed: true}
                         ,{field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                        , {field: 'name', title: '用户名', width: 120, edit: 'text'}
+                        , {field: 'name', title: '角色', width: 120, edit: 'text'}
                         , {field: 'remark', title: '描述', width: 120, edit: 'text'}
                         , {
                         field: 'status', title: '状态', width: 120, templet: function (res) {
