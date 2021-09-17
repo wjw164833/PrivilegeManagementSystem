@@ -108,16 +108,15 @@ public class UserImpl implements UserService {
     @Override
     public Result userAdd(UserSelectBo userSelectBo) {
         User user = new User();
-        user.setId(userSelectBo.getId());
         user.setAccount(userSelectBo.getAccount());
         user.setName(userSelectBo.getName());
         user.setPassword(userSelectBo.getPassword());
         user.setEmail(userSelectBo.getEmail());
         user.setMobile(userSelectBo.getMobile());
-        user.setDepId(userSelectBo.getDepId());
+        user.setDepid(userSelectBo.getDepId());
         user.setSex(userSelectBo.getSex());
         user.setStatus(userSelectBo.getStatus());
-        int row =userMapper.insert(user);
+        int row =userMapper.insertUser(user);
         //判断插入结果
         if (row == 0) {
             return Result.error("添加用户失败");
@@ -134,7 +133,7 @@ public class UserImpl implements UserService {
         user.setPassword(userSelectBo.getPassword());
         user.setEmail(userSelectBo.getEmail());
         user.setMobile(userSelectBo.getMobile());
-        user.setDepId(userSelectBo.getDepId());
+        user.setDepid(userSelectBo.getDepId());
         user.setSex(userSelectBo.getSex());
         user.setStatus(userSelectBo.getStatus());
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();

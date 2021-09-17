@@ -1,6 +1,8 @@
 package xyz.wjw.priviligemanagementsystem.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,13 +20,13 @@ public class User implements Serializable {
 
     private static final long serialVersionUID=1L;
 
+    @TableId(value = "id",type = IdType.AUTO)
     private String id;
 
     private String name;
 
     @ApiModelProperty(value = "部门Id")
-    @TableField("depId")
-    private String depId;
+    private String depid;
 
     private String account;
 

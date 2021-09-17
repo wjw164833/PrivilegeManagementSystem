@@ -44,27 +44,23 @@ layui.use(['form','layer','jquery'],function (){
         $.ajax({
             url:'/user/userAdd',
             data:data.field,
-            type:'post',//返回数据格式,
+            type:'GET',//返回数据格式,
             dataType: "json",
             success:function(data){
-                console.log("___________测试______________");
-                if(data.flag==="true"){
+                if(data.code==200){
+                    //location.reload();
+                    layer.msg("修改成功", {icon: 6,time: 1000},function () {
+                        layer.close(layer.index);
+                        window.parent.location.reload();
+                    });
 
-                    // 延迟3秒
-                    setTimeout(function () {
-                        //先得到当前iframe层的索引
-                        var index = parent.layer.getFrameIndex(window.name);
-                        //再执行关闭
-                        parent.layer.close(index);
-                    }, 2000);
-
-                    return false;
                 }
             },
-            error: function () {
-                layer.msg(data.errMesage, {icon: 2, anim: 6});
+            error: function (data) {
+                layer.msg("失败", {icon: 2, anim: 6});
             }
         });
+        return false;
     });
 
 })

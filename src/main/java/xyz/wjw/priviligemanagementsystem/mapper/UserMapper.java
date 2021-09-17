@@ -24,4 +24,6 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select * from sys_user where name=#{username}")
     User selectByUserName(String username);
+
+    int insertUser(User user);
 }

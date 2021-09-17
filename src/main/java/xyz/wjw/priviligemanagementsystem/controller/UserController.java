@@ -80,8 +80,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "用户增加", notes = "用户增加接口")
-    @PutMapping("/userAdd")
-    public Result userAdd(@RequestBody UserSelectBo userSelectBo) {
+    @ResponseBody
+    @RequestMapping("/userAdd")
+    public Result userAdd(UserSelectBo userSelectBo) {
         return userService.userAdd(userSelectBo);
     }
 

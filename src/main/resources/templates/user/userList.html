@@ -47,7 +47,9 @@
         <i class="layui-icon" style="font-size: smaller" lay-event="batchDel">&#xe640;&nbsp批量删除</i>
     </button>
     <button type="button" class="layui-btn layui-btn-sm layui-btn-warm">
-        <i class="layui-icon" style="font-size: smaller" lay-event="batchAdd">&#xe624;&nbsp新增</i>
+        <i class="layui-icon" style="font-size: smaller" lay-event="batchAdd">
+            <i class="layui-icon" style="font-size: smaller" lay-event="add">&#xe624;新增</i>
+        </i>
     </button>
 </div>
 
@@ -209,6 +211,20 @@
 
                     });
                 });
+            }else if (obj.event === 'add') {
+                //layer.msg("新增");
+                    layer.open({
+                    type: 2,
+                    anim: 0,
+                    title: '编辑信息',
+                    scrollbar: false,
+                    area: ['40%', '80%'],
+                    content: '/register',
+                    success: function (data) {
+
+                    }
+
+                    });
             }
 
         });
@@ -239,66 +255,102 @@
                     });
                 });
             } else if (obj.event === 'edit') {
-                window.userData = data;
-                let index = layer.open({
-                    type: 2,
-                    anim: 0,
-                    title: '编辑信息',
-                    scrollbar: false,
-                    area: ['100%', '100%'],
-                    content: '/user/userUpdate',
-                    success: function (layero, index) {
-                        var body = layer.getChildFrame('body', index);
-                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
-
-                        /* 动态赋值下拉框*/
-                        var depid = data.depid;
-                        var sex = data.sex;
-                        if (sex == '0') {
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("男"));
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
-                        } else if (sex == '1') {
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("女"));
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
-                        } else {
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("保密"));
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
-                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
-                        }
-                        //动态添加部门
-                        $.post("findAllDept", function (data) {
-                            $.each(data, function (index, item) {
-                                if (item.id == depid) {
-                                    //console.log(item.name);
-                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).attr("selected", "selected").text(item.name));
-                                } else {
-                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).text(item.name));
+                        layui.use(["jquery","layer"],function (){
+                            // console.log(data)
+                            var $ = layui.$;
+                            var layer = layui.layer;
+                            $.ajax({
+                                url:"/user/userUpdate",
+                                type:"post",
+                                data:JSON.stringify(data),
+                                contentType:"application/json;charset=UTF-8",
+                                dataType:"json",
+                                success:function (date) {
+                                    if (date>0){
+                                        layer.msg("修改失败", {icon: 5});
+                                    } else {
+                                        layer.msg("修改成功", {icon: 6});
+                                        sxym();
+                                    }
                                 }
-                            });
-                            iframeWin.layui.form.render("select");
-                        }, 'json');
-
-                        //动态添加角色
-                        var id = data.id;
-                        $.post("findAllRole1?id=" + id, function (data) {
-                            $.each(data, function (index, item) {
-                                console.log(item.name);
-                                if (item.hasRight)
-                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id).attr("checked", "checked"));
-                                else
-                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id));
-                            });
-                            iframeWin.layui.form.render();
-                        }, 'json')
-
-                    },
-                });
+                            })
+                        })
+                // else if (obj.event === 'edit') {
+            //     window.userData = data;
+            //     let index = layer.open({
+            //         type: 2,
+            //         anim: 0,
+            //         title: '编辑信息',
+            //         scrollbar: false,
+            //         area: ['100%', '100%'],
+            //         content: '/user/userUpdate',
+            //         success: function (layero, index) {
+            //             var body = layer.getChildFrame('body', index);
+            //             var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
+            //
+            //             /* 动态赋值下拉框*/
+            //             var depid = data.depid;
+            //             var sex = data.sex;
+            //             if (sex == '0') {
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("男"));
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
+            //             } else if (sex == '1') {
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("女"));
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
+            //             } else {
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("保密"));
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
+            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
+            //             }
+            //             //动态添加部门
+            //             $.post("findAllDept", function (data) {
+            //                 $.each(data, function (index, item) {
+            //                     if (item.id == depid) {
+            //                         //console.log(item.name);
+            //                         layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).attr("selected", "selected").text(item.name));
+            //                     } else {
+            //                         layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).text(item.name));
+            //                     }
+            //                 });
+            //                 iframeWin.layui.form.render("select");
+            //             }, 'json');
+            //
+            //             //动态添加角色
+            //             var id = data.id;
+            //             $.post("findAllRole1?id=" + id, function (data) {
+            //                 $.each(data, function (index, item) {
+            //                     console.log(item.name);
+            //                     if (item.hasRight)
+            //                         layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id).attr("checked", "checked"));
+            //                     else
+            //                         layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id));
+            //                 });
+            //                 iframeWin.layui.form.render();
+            //             }, 'json')
+            //
+            //         },
+            //     });
             }
         });
+
+
     });
 
+
+    /*注册*/
+    function register() {
+        layer.open({
+            title: '增加用户',
+            type: 2,//层类型：2（iframe层）
+            shade:0.2,//遮罩
+            maxmin:true,//最大最小化。
+            shadeClose: true,//是否点击遮罩关闭
+            area: ['35%', '80%'],//宽高
+            content: '/register'
+        });
+    }
         // //监听行工具事件
         // table.on('tool(test)', function(obj) {
         //     var data = obj.data;
