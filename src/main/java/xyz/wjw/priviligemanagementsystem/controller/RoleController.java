@@ -51,9 +51,21 @@ public class RoleController {
     }
 
     @ApiOperation(value = "角色删除(单个，批量)", notes = "角色删除接口（单个，批量）")
-    @PutMapping("/roleDelete")
-    public Result userDelete(@RequestBody RoleDeleteBo roleDeleteBo) {
+    @PostMapping("/roleDelete")
+    public Result roleDelete(RoleDeleteBo roleDeleteBo) {
         return roleService.roleDelete(roleDeleteBo.getIds()
+        );
+    }
+    @ApiOperation(value = "角色状态", notes = "角色状态")
+    @PostMapping("/roleStatus")
+    public Result roleStatus(Role roleDeleteBo) {
+        return roleService.roleStatus(roleDeleteBo
+        );
+    }
+    @ApiOperation(value = "角色状态", notes = "角色状态")
+    @PostMapping("/roleIsdeleted")
+    public Result roleIsdeleted(Role roleDeleteBo) {
+        return roleService.roleIsdeleted(roleDeleteBo
         );
     }
 }

@@ -30,6 +30,7 @@
         <button type="reset" class="layui-btn layui-btn-primary layui-col-md-offset1">重置</button>
     </div>
 </form>
+<table class="layui-hide" id="demo" lay-filter="test"></table>
 <div id="btn2" style="display:none;">
     <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">
         <i class="layui-icon" style="font-size: smaller" lay-event="batchDel">&#xe640;&nbsp批量删除</i>
@@ -38,7 +39,6 @@
         <i class="layui-icon" style="font-size: smaller" lay-event="batchAdd">&#xe624;&nbsp新增</i>
     </button>
 </div>
-<table id="demo" lay-filter="test"></table>
 <div id="btn1" style="display:none;">
     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">
         <i class="layui-icon" style="font-size: smaller" lay-event="edit"> &#xe642;编辑</i>
@@ -52,7 +52,7 @@
     <input type="hidden" id="id" value="${d.id }" />
 </script>
 <script type="text/html" id="switchTpl1">
-    <input type="checkbox" value="{{d.id}}" name="status" lay-skin="switch" lay-text="正常|禁用" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}>
+    <input type="checkbox" value="{{d.id}}" name="isDelete" lay-skin="switch" lay-text="正常|禁用" lay-filter="isDelete" {{ d.status == 0 ? 'checked' : '' }}>
     <input type="hidden" id="id1" value="${d.id }" />
 </script>
 <script src="/layui/layui.js"></script>
@@ -86,6 +86,7 @@
                 , url: '/user/roleSelect' //数据接口
                 , method: 'post'
                 ,toolbar: '#btn2'
+                ,tool: '#btn1'
                 , contentType:'application/json'
                 ,where: {name: name, status: status,isdeleted:isdeleted}
                 , page: true
@@ -146,6 +147,188 @@
             active[type] ? active[type].call(this) : '';
         });
 
+        //监听toolbar
+        table.on('toolbar(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'batchDel') {
+                //layer.msg("批量删除操作");
+                var checkStatus = table.checkStatus('tId');
+                if (checkStatus.data.length == 0) {
+                    layer.msg('请先选择要删除的数据行！', {icon: 2, time: 1100});
+                    return;
+                }
+                var id = "";
+                for (var i = 0; i < checkStatus.data.length; i++) {
+                    id += checkStatus.data[i].id + ",";
+                }
+                console.log(id)
+                layer.confirm("确定要删除所选数据？删除后无法恢复！", {icon: 3, title: "提示"}, function () {
+                    console.log(id)
+                    $.ajax({
+                        type: "post",
+                        url: '/user/roleDelete',
+                        data: {"ids": id},
+                        success: function (data) {
+                            if (data.code == 200) {
+                                location.reload();
+                                layer.msg('删除成功', {
+                                    icon: 6,
+                                    time: 1500
+                                });
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                                layer.close(index);
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            layer.msg('删除失败！');
+                        },
+
+                    });
+                });
+            }
+
+        });
+        //修改状态switch
+        form.on('switch(status)', function (data) {
+            // 得到开关的value值，需要修改的ID值。
+            var id = data.value;
+            var status = this.checked ? '1' : '0';
+            // alert(id+"++"+status);
+            $.ajax({
+                type: 'POST',
+                url: '/user/roleStatus',
+                data: {"id": id, "status": status},
+                error: function (data) {
+                    console.log(data);
+                    layer.msg('数据异常，操作失败！');
+                },
+                success: function (data) {
+                    if (data = 1) {
+                        setTimeout(function () {
+                            layer.msg('操作成功！');
+                        }, 100);
+                        $(".layui-icon-refresh").click();
+                    } else {
+                        console.log(data);
+                        layer.msg('数据异常，操作失败！');
+                    }
+                },
+                dataType: 'JSON'
+            });
+        });
+        form.on('switch(isDelete)', function (data) {
+            // 得到开关的value值，需要修改的ID值。
+            var id = data.value;
+            var isDelete = this.checked ? '1' : '0';
+            // alert(id+"++"+status);
+            $.ajax({
+                type: 'POST',
+                url: '/user/roleIsdeleted',
+                data: {"id": id, "isdeleted": isDelete},
+                error: function (data) {
+                    console.log(data);
+                    layer.msg('数据异常，操作失败！');
+                },
+                success: function (data) {
+                    if (data = 1) {
+                        setTimeout(function () {
+                            layer.msg('操作成功！');
+                        }, 100);
+                        $(".layui-icon-refresh").click();
+                    } else {
+                        console.log(data);
+                        layer.msg('数据异常，操作失败！');
+                    }
+                },
+                dataType: 'JSON'
+            });
+        });
+        //监听工具条
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的要删除所选数据？删除后无法恢复！', {icon: 3, title: "提示"}, function (index) {
+                    $.ajax({
+                        url: "/user/roleDelete",
+                        type: "POST",
+                        data: {"ids": data.id},
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.code == 200) {
+                                obj.del();
+                                layer.close(index);
+                                layer.msg("删除成功", {icon: 6});
+                            } else {
+                                layer.msg("删除失败", {icon: 5});
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                            layer.msg('删除失败！');
+                        },
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                window.userData = data;
+                let index = layer.open({
+                    type: 2,
+                    anim: 0,
+                    title: '编辑信息',
+                    scrollbar: false,
+                    area: ['100%', '100%'],
+                    content: '/user/roleUpdate',
+                    success: function (layero, index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
+
+                        /* 动态赋值下拉框*/
+                        var depid = data.depid;
+                        var sex = data.sex;
+                        if (sex == '0') {
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
+                        } else if (sex == '1') {
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("女"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
+                        } else {
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("保密"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
+                            layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
+                        }
+                        //动态添加部门
+                        $.post("findAllDept", function (data) {
+                            $.each(data, function (index, item) {
+                                if (item.id == depid) {
+                                    //console.log(item.name);
+                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).attr("selected", "selected").text(item.name));
+                                } else {
+                                    layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).text(item.name));
+                                }
+                            });
+                            iframeWin.layui.form.render("select");
+                        }, 'json');
+
+                        //动态添加角色
+                        var id = data.id;
+                        $.post("findAllRole1?id=" + id, function (data) {
+                            $.each(data, function (index, item) {
+                                console.log(item.name);
+                                if (item.hasRight)
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id).attr("checked", "checked"));
+                                else
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id));
+                            });
+                            iframeWin.layui.form.render();
+                        }, 'json')
+
+                    },
+                });
+            }
+        });
     });
 
     //Demo

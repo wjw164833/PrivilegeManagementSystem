@@ -7,10 +7,17 @@ import xyz.wjw.priviligemanagementsystem.entity.Role;
 
 import java.util.List;
 
+/**
+ * @author ASUS
+ */
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
     List<Object> roleSelect(RoleSelectQuery roleSelectQuery);
 
     int roleDelete(List<String> ids);
+
+    int roleStatus(Role role);
+
+    int roleIsdeleted(Role role);
 }

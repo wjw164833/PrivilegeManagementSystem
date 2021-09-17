@@ -11,17 +11,17 @@ public class MenuSelectBo {
 
     private String name;
 
-    private String appurl;
+    private String appUrl;
 
-    private String imgurl;
+    private String imgUrl;
 
     private String type;
 
-    private String sortcode;
+    private String sortCode;
 
-    private String parentid;
+    private String parentId;
 
-    private String isdeleted;
+    private String isDeleted;
 //    @ApiModelProperty(value = "页码")
 //    private int page;
 //    @ApiModelProperty(value = "每页记录条数")

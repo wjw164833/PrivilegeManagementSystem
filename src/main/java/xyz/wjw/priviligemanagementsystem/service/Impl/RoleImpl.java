@@ -57,7 +57,7 @@ public class RoleImpl implements RoleService {
         }
         //当前页大于总页数
         if (PaginationUtils.isValid(paginationDate)) {
-            return xyz.wjw.priviligemanagementsystem.vo.Result.error("当前页大于总页数");
+            return Result.error("当前页大于总页数");
         }
         return Result.success(new QueryReturnDate(paginationDate, ClassVos));
     }
@@ -99,6 +99,26 @@ public class RoleImpl implements RoleService {
     @Override
     public Result roleDelete(@NonNull List<String> ids) {
         int row =roleMapper.roleDelete(ids);
+        //判断插入结果
+        if (row == 0) {
+            return Result.error("删除角色失败");
+        }
+        return Result.success();
+    }
+
+    @Override
+    public Result roleStatus(Role role) {
+        int row =roleMapper.roleStatus(role);
+        //判断插入结果
+        if (row == 0) {
+            return Result.error("删除角色失败");
+        }
+        return Result.success();
+    }
+
+    @Override
+    public Result roleIsdeleted(Role role) {
+        int row =roleMapper.roleIsdeleted(role);
         //判断插入结果
         if (row == 0) {
             return Result.error("删除角色失败");

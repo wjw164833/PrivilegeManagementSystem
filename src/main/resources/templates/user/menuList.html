@@ -138,7 +138,16 @@
 
     /*注册*/
     function addMenu() {
-
+        layer.open({
+            title: '添加节点',
+            type: 2,//层类型：2（iframe层）
+            shade:0.2,//遮罩
+            maxmin:true,//最大最小化。
+            shadeClose: true,//是否点击遮罩关闭
+            area: ['35%', '80%'],//宽高
+            content: '/addMenu'
+        });
+        return -1;
     }
 </script>
 

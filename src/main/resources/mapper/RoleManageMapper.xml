@@ -9,13 +9,13 @@
 
   <select id="roleSelect" parameterType="xyz.wjw.priviligemanagementsystem.dto.RoleSelectQuery" resultMap="SelectRoleVo,userTotal1">
     SELECT
-      sys_role.id,
-      sys_role.`name`,
-      sys_role.remark,
-      sys_role.`status`,
-      sys_role.isDeleted
+    sys_role.id,
+    sys_role.`name`,
+    sys_role.remark,
+    sys_role.`status`,
+    sys_role.isDeleted
     FROM
-      sys_role
+    sys_role
     <where>
       <if test="name!=null and name!=''">
         sys_role.`name` LIKE "%"#{name}"%"
@@ -40,5 +40,14 @@
     </foreach>
     )
   </delete>
-
+  <update id="roleStatus">
+    update sys_role set status=case status
+                                 when 0 then 1
+                                 else 0 end where id=#{id}
+  </update>
+  <update id="roleIsdeleted">
+    update sys_role set isDeleted=case isDeleted
+                                    when 0 then 1
+                                    else 0 end where id=#{id}
+  </update>
 </mapper>

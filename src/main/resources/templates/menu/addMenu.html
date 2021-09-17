@@ -63,7 +63,7 @@
     <div class="layui-form-item">
       <label class="layui-form-label"><i class="layui-icon layui-icon-form"></i></label>
       <div class="layui-input-block">
-        <select name="type">
+        <select name="type" lay-verify="required">
           <option value="">请选择类型（0菜单，1按钮）</option>
           <option value="0">菜单</option>
           <option value="1">按钮</option>
@@ -94,41 +94,47 @@
 <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
 <script src="/layui/layui.js"></script>
 <script>
-  layui.use(['form','layer','jquery'],function (){
-    var form =layui.form;
+  layui.use(['form','layer','jquery'],function () {
+    var form = layui.form;
     var $ = layui.jquery;
-    var layer=layui.layer;
+    var layer = layui.layer;
     form.render();
-    form.verify({
 
-    form.on('submit(register)', function(data){
-      $.ajax({
-        url:'/user/userAdd',
-        data:data.field,
-        type:'post',//返回数据格式,
-        dataType: "json",
-        success:function(data){
-          console.log("___________测试______________");
-          if(data.flag==="true"){
+    form.on('submit(register)', function (data) {
+        $.ajax({
+          url: '/menu/menuAdd',
+          data: data.field,
+          type: 'post',//返回数据格式,
+          dataType: "json",
 
-            // 延迟3秒
-            setTimeout(function () {
-              //先得到当前iframe层的索引
-              var index = parent.layer.getFrameIndex(window.name);
-              //再执行关闭
-              parent.layer.close(index);
-            }, 2000);
+          success:function (date) {
+            if (date>0){
+              layer.msg("增加失败", {icon: 5});
+              window.parent.location.reload();
+            } else {
+              layer.msg("增加成功", {icon: 6});
+              window.parent.location.reload();
+            }
 
-            return false;
-          }
-        },
-        error: function () {
-          layer.msg(data.errMesage, {icon: 2, anim: 6});
-        }
-      });
-    });
+          // success:function(data){
+          //   if(data.code==200){
+          //     //location.reload();
+          //     layer.msg("增加成功", {icon: 6,time: 1000},function () {
+          //       layer.close(layer.index);
+          //       window.parent.location.reload();
+          //     });
+          //
+          //   }
+          // },
+          // error: function (data) {
+          //   layer.msg("失败", {icon: 2, anim: 6});
+          // }
+        })
+    })
+    return false;
+  });
 
-  })
+
 </script>
 </body>
 </html>

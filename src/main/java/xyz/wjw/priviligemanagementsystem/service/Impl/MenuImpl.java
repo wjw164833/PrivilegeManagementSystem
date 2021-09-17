@@ -71,18 +71,17 @@ public class MenuImpl implements MenuService {
     @Override
     public Result menuAdd(MenuSelectBo menuSelectBo) {
         Menu menu = new Menu();
-        menu.setId(menuSelectBo.getId());
         menu.setName(menuSelectBo.getName());
-        menu.setAppurl(menuSelectBo.getAppurl());
-        menu.setImgurl(menuSelectBo.getImgurl());
+        menu.setAppUrl(menuSelectBo.getAppUrl());
+        menu.setImgUrl(menuSelectBo.getImgUrl());
         menu.setType(menuSelectBo.getType());
-        menu.setSortcode(menuSelectBo.getSortcode());
-        menu.setParentid(menuSelectBo.getParentid());
-        menu.setIsdeleted(menuSelectBo.getIsdeleted());
+        menu.setSortCode(menuSelectBo.getSortCode());
+        menu.setParentId(menuSelectBo.getParentId());
+        menu.setIsDeleted(menuSelectBo.getIsDeleted());
         int row =menuMapper.insert(menu);
         //判断插入结果
         if (row == 0) {
-            return Result.error("添加用户失败");
+            return Result.error("添加权限列表失败");
         }
         return Result.success();
     }
@@ -90,21 +89,19 @@ public class MenuImpl implements MenuService {
     @Override
     public Result menuUpdate(MenuSelectBo menuSelectBo) {
         Menu menu = new Menu();
-        menu.setId(menuSelectBo.getId());
-        menu.setId(menuSelectBo.getId());
         menu.setName(menuSelectBo.getName());
-        menu.setAppurl(menuSelectBo.getAppurl());
-        menu.setImgurl(menuSelectBo.getImgurl());
+        menu.setAppUrl(menuSelectBo.getAppUrl());
+        menu.setImgUrl(menuSelectBo.getImgUrl());
         menu.setType(menuSelectBo.getType());
-        menu.setSortcode(menuSelectBo.getSortcode());
-        menu.setParentid(menuSelectBo.getParentid());
-        menu.setIsdeleted(menuSelectBo.getIsdeleted());
+        menu.setSortCode(menuSelectBo.getSortCode());
+        menu.setParentId(menuSelectBo.getParentId());
+        menu.setIsDeleted(menuSelectBo.getIsDeleted());
         UpdateWrapper<Menu> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda().eq(Menu::getId, menuSelectBo.getId());
         int row =menuMapper.update(menu, updateWrapper);
         //判断插入结果
         if (row == 0) {
-            return Result.error("修改用户失败");
+            return Result.error("修改权限列表失败失败");
         }
         return Result.success();
     }

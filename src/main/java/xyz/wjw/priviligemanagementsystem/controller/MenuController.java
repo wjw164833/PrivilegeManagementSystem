@@ -36,8 +36,9 @@ public class MenuController {
     }
 
     @ApiOperation(value = "菜单增加", notes = "菜单增加接口")
-    @PutMapping("/menuAdd")
-    public Result menuAdd(@RequestBody @Validated MenuSelectBo menuSelectBo) {
+    @ResponseBody
+    @RequestMapping("/menuAdd")
+    public Result menuAdd(MenuSelectBo menuSelectBo) {
         return menuService.menuAdd(menuSelectBo
         );
     }

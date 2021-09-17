@@ -49,7 +49,7 @@ layui.use(['form','layer','jquery'],function (){
             success:function(data){
                 if(data.code==200){
                     //location.reload();
-                    layer.msg("修改成功", {icon: 6,time: 1000},function () {
+                    layer.msg("增加成功", {icon: 6,time: 1000},function () {
                         layer.close(layer.index);
                         window.parent.location.reload();
                     });

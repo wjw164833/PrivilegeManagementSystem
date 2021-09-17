@@ -29,4 +29,9 @@ public interface RoleService {
     Result roleDelete(
             @NonNull List<String> ids
     );
+    Result roleStatus(
+            @NonNull Role role
+    );
+
+    Result roleIsdeleted(Role role);
 }
