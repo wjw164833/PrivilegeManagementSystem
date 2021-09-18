@@ -57,4 +57,14 @@ public class pagesController {
     public String addMenu(){
         return "menu/addMenu";
     }
+
+    @RequestMapping(value="/updateMenu")
+    public String updateMenu(){
+        return "menu/updateMenu";
+    }
+
+    @RequestMapping(value="/addRole")
+    public String addRole(){
+        return "user/addRole";
+    }
 }

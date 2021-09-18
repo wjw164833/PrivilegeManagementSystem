@@ -44,7 +44,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "角色修改", notes = "角色修改接口")
-    @PutMapping("/roleUpdate")
+    @PostMapping("/roleUpdate")
     public Result roleUpdate(@RequestBody @Validated RoleSelectBo roleSelectBo) {
         return roleService.roleUpdate(roleSelectBo
         );

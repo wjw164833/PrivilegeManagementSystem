@@ -36,7 +36,7 @@
 </head>
 <body>
 <div class="layui-row">
-  <form class="layui-form layui-form-pane" onclick="return false;">
+  <form class="layui-form layui-form-pane" onclick="return false;" lay-filter="edit_form">
     <div class="layui-form-item" style="margin-top: 5px">
       <label class="layui-form-label">
         <i class="layui-icon layui-icon-tabs"></i></label>
@@ -86,7 +86,8 @@
       </div>
     </div>
     <div class="layui-button-inline login_line8">
-      <button class="layui-btn" lay-submit="" lay-filter="register">增加</button>
+      <input type="hidden" name="id"/>
+      <button class="layui-btn" lay-submit="" lay-filter="register">修改</button>
     </div>
 
   </form>
@@ -94,31 +95,41 @@
 <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
 <script src="/layui/layui.js"></script>
 <script>
-  layui.use(['form','layer','jquery'],function () {
-    var form = layui.form;
-    var $ = layui.jquery;
-    var layer = layui.layer;
-    //form.render();
+  function child(d){
+    layui.use(['form','layer','jquery'],function () {
+      var form = layui.form;
+      var $ = layui.jquery;
+      var layer = layui.layer;
 
-    form.on('submit(register)', function (data) {
+      console.log(d);
+      // 表格赋值
+      form.val('edit_form', {
+        "id": d.id,
+        "name": d.title,
+        "appImg": d.url,
+        "imgUrl": d.icon,
+        "type": d.type,
+        "sortCode": d.sort,
+        "parentId": d.pid
+      });
+
+      form.on('submit(register)', function (data) {
         $.ajax({
-          url: '/menu/menuAdd',
+          url: '/menu/menuUpdate',
           data: JSON.stringify(data.field),
           type: 'post',//返回数据格式,
           contentType:"application/json;charset=UTF-8",
           success:function (date) {
             if (date > 0) {
-              layer.msg("增加失败", {icon: 5});
+              layer.msg("修改失败", {icon: 5});
               // 掉用父页面的获取列表方法
-              var evalStr = "parent.loadPage()";
-              eval(evalStr);
+              eval("parent.loadPage()");
               // 关闭子页面
               var index = parent.layer.getFrameIndex(window.name);
               parent.layer.close(index);
             } else {
-              layer.msg("增加成功", {icon: 6});
-              var evalStr = "parent.loadPage()";
-              eval(evalStr);
+              layer.msg("修改成功", {icon: 6});
+              eval("parent.loadPage()");
               // 关闭子页面
               var index = parent.layer.getFrameIndex(window.name);
               parent.layer.close(index);
@@ -139,12 +150,10 @@
           //   layer.msg("失败", {icon: 2, anim: 6});
           // }
         })
-
-    })
-    return false;
-  });
-
-
+      })
+      return false;
+    });
+  }
 </script>
 </body>
 </html>

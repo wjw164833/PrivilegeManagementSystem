@@ -44,7 +44,7 @@ public class MenuController {
     }
 
     @ApiOperation(value = "菜单修改", notes = "菜单修改接口")
-    @PutMapping("/menuUpdate")
+    @PostMapping("/menuUpdate")
     public Result menuUpdate(@RequestBody @Validated MenuSelectBo menuSelectBo) {
         return menuService.menuUpdate(menuSelectBo
         );

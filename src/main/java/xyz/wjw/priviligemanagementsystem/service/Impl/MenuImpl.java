@@ -37,6 +37,8 @@ public class MenuImpl implements MenuService {
                 node.setTitle(item.getName());
                 node.setUrl(item.getAppurl());
                 node.setType(Integer.parseInt(item.getType()));
+                node.setPid(Integer.parseInt(item.getParentid()));
+                node.setSort(Integer.parseInt(item.getSortcode()));
                 node.setChildren(recursion(list, node.getId()));
                 ret.add(node);
             }
@@ -59,6 +61,8 @@ public class MenuImpl implements MenuService {
                     node.setTitle(item.getName());
                     node.setUrl(item.getAppurl());
                     node.setType(Integer.parseInt(item.getType()));
+                    node.setPid(Integer.parseInt(item.getParentid()));
+                    node.setSort(Integer.parseInt(item.getSortcode()));
                     node.setChildren(recursion(list, node.getId()));
                     ret.add(node);
                 }

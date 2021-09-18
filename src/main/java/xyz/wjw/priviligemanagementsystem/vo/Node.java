@@ -15,5 +15,7 @@ public class Node {
     private String url;
     private String icon;
     private Integer type;
+    private Integer pid;
+    private Integer sort;
 
 }
