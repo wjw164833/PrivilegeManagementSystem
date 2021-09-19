@@ -36,7 +36,7 @@
         <i class="layui-icon" style="font-size: smaller" lay-event="batchDel">&#xe640;&nbsp批量删除</i>
     </button>
     <button type="button" class="layui-btn layui-btn-sm layui-btn-warm">
-        <i class="layui-icon" style="font-size: smaller" lay-event="add">&#xe624;&nbsp新增</i>
+        <i class="layui-icon" style="font-size: smaller" lay-event="batchAdd">&#xe624;&nbsp新增</i>
     </button>
 </div>
 <div id="btn1" style="display:none;">
@@ -48,11 +48,11 @@
     </button>
 </div>
 <script type="text/html" id="switchTpl">
-    <input type="checkbox" value="{{d.id}}" name="status" lay-skin="switch" lay-text="正常|禁用" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}>
+    <input type="checkbox" value="{{d.id}}" name="status" lay-skin="switch" lay-text="正常|禁用" lay-filter="status" {{ d.status == 0 ? 'checked' : '' }}/>
     <input type="hidden" id="id" value="${d.id }" />
 </script>
 <script type="text/html" id="switchTpl1">
-    <input type="checkbox" value="{{d.id}}" name="isDelete" lay-skin="switch" lay-text="正常|禁用" lay-filter="isDelete" {{ d.status == 0 ? 'checked' : '' }}>
+    <input type="checkbox" value="{{d.id}}" name="isDelete" lay-skin="switch" lay-text="正常|禁用" lay-filter="isDelete" {{ d.isdeleted == 0 ? 'checked' : '' }}/>
     <input type="hidden" id="id1" value="${d.id }" />
 </script>
 <script src="/layui/layui.js"></script>
@@ -187,7 +187,7 @@
 
                     });
                 });
-            }else if (obj.event === 'add') {
+            }else if (obj.event === 'batchAdd') {
                 //layer.msg("新增");
                 layer.open({
                     type: 2,
@@ -195,15 +195,13 @@
                     title: '新增用户',
                     scrollbar: false,
                     area: ['40%', '80%'],
-                    content: '/addRole',
+                    content: '/register1',
                     success: function (data) {
 
                     }
 
                 });
             }
-
-        });
 
         });
         //修改状态switch
@@ -305,9 +303,9 @@
                             }
                         }
                     })
-                })
+                });
             }
-
+        });
     });
 
     //Demo
@@ -320,7 +318,18 @@
             return false;
         });
     });
-
+    /*注册*/
+    function register1() {
+        layer.open({
+            title: '增加用户',
+            type: 2,//层类型：2（iframe层）
+            shade:0.2,//遮罩
+            maxmin:true,//最大最小化。
+            shadeClose: true,//是否点击遮罩关闭
+            area: ['35%', '80%'],//宽高
+            content: '/register1'
+        });
+    }
 </script>
 
 </body>
