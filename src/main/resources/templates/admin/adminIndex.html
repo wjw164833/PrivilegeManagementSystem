@@ -18,30 +18,22 @@
     <div class="layui-logo">权限管理系统</div>
     <!-- 头部区域（可配合layui已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
-      <li class="layui-nav-item"><a href="">控制台</a></li>
-      <li class="layui-nav-item"><a href="">角色</a></li>
-      <li class="layui-nav-item"><a href="">用户</a></li>
-      <li class="layui-nav-item">
-        <a href="javascript:;">其它系统</a>
-        <dl class="layui-nav-child">
-          <dd><a href="">邮件管理</a></dd>
-          <dd><a href="">消息管理</a></dd>
-          <dd><a href="">授权管理</a></dd>
-        </dl>
-      </li>
+      <li class="layui-nav-item"><a href="/adminIndex">主页</a></li>
+      <li class="layui-nav-item"><a data-url="/userList" data-id="user" data-title="用户信息" class="site-demo-active" href="javascript:;" data-type="tabAdd">用户</a></li>
+      <li class="layui-nav-item"><a data-url="/roleList" data-id="role" data-title="角色信息" class="site-demo-active" href="javascript:;" data-type="tabAdd">角色</a></li>
+      <li class="layui-nav-item"><a data-url="/menuList" data-id="quanxian" data-title="权限列表" class="site-demo-active" href="javascript:;" data-type="tabAdd">权限</a></li>
     </ul>
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
           <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-          admin
         </a>
-        <dl class="layui-nav-child">
-          <dd><a href="">基本资料</a></dd>
-          <dd><a href="">安全设置</a></dd>
-        </dl>
+<!--        <dl class="layui-nav-child">-->
+<!--          <dd><a href="">基本资料</a></dd>-->
+<!--          <dd><a href="">安全设置</a></dd>-->
+<!--        </dl>-->
       </li>
-      <li class="layui-nav-item"><a href="/loginout">退了</a></li>
+      <li class="layui-nav-item"><a data-url="/loginout" href="/login">退出</a></li>
     </ul>
   </div>
 
@@ -55,7 +47,6 @@
             <dd><a data-url="/userList" data-id="user" data-title="用户信息" class="site-demo-active" href="javascript:;" data-type="tabAdd">用户信息</a></dd>
             <dd><a data-url="/roleList" data-id="role" data-title="角色信息" class="site-demo-active" href="javascript:;" data-type="tabAdd">角色信息</a></dd>
             <dd><a data-url="/menuList" data-id="quanxian" data-title="权限列表" class="site-demo-active" href="javascript:;" data-type="tabAdd">权限列表</a></dd>
-            <dd><a data-url="/userroleList" data-id="information" data-title="权限信息" class="site-demo-active" href="javascript:;" data-type="tabAdd">权限信息</a></dd>
           </dl>
         </li>
         <li class="layui-nav-item">
@@ -79,9 +70,19 @@
       <ul class="layui-tab-title">
         <li class="layui-this" lay-id="id">控制台</li>
       </ul>
-      <div class="layui-tab-content" style="width:100%;height:100%;">
-        <div class="layui-tab-item layui-show" style="width:100%;height:100%;">
-          控制台
+      <div class="layui-tab-content" style="background-color:#91d5ff;width:100%;height:100%;">
+        <div class="layui-tab-item layui-show" style="width:100%;height:100%;text-align: center;width: 400px;
+height: 300px;
+font-size: 50px;color: white;
+/* 把元素变成定位元素 */
+position: absolute;
+/* 元素距离上，左都为50% */
+left: 50%;
+top: 50%;
+/* 让元素的左外边距，上外边距为元素宽高的1/2 注意margin是负距*/
+margin-top: -280px;
+margin-left: -300px;" >
+          <h1>欢迎使用本系统</h1>
         </div>
       </div>
 <!--      <div class="layui-body" style="top:50px;width:100%;height:100%;">-->
