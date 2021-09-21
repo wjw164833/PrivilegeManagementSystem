@@ -11,7 +11,10 @@ import xyz.wjw.priviligemanagementsystem.entity.Role;
 import xyz.wjw.priviligemanagementsystem.service.RoleService;
 import xyz.wjw.priviligemanagementsystem.vo.Result;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ASUS
@@ -37,8 +40,9 @@ public class RoleController {
     }
 
     @ApiOperation(value = "角色增加", notes = "角色增加接口")
-    @PutMapping("/roleAdd")
-    public Result roleAdd(@RequestBody @Validated RoleSelectBo roleSelectBo) {
+    @ResponseBody
+    @GetMapping("/roleAdd")
+    public Result roleAdd(RoleSelectBo roleSelectBo) {
         return roleService.roleAdd(roleSelectBo
         );
     }
@@ -67,5 +71,26 @@ public class RoleController {
     public Result roleIsdeleted(Role roleDeleteBo) {
         return roleService.roleIsdeleted(roleDeleteBo
         );
+    }
+
+    @RequestMapping(value="/updateTree")
+    @ResponseBody
+    public Map<String,String> updateTree(String menuIds, Long roleId){
+        Map<String,String> map = new HashMap<>();
+        boolean res=roleService.delRoleMenuFirst(roleId);
+        //System.out.println("++++++++++");
+        List<String> list = Arrays.asList(menuIds.split(","));
+        list.forEach(i->{
+            //System.out.println(i);
+            boolean result=roleService.updateTree(roleId,i);
+            if (result){
+                map.put("flag","true");
+                map.put("errorMsg","操作失败");
+            }else {
+                map.put("errorMsg","操作失败");
+            }
+        });
+
+        return map;
     }
 }

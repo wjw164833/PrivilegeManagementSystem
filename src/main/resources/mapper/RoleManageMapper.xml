@@ -9,13 +9,13 @@
 
   <select id="roleSelect" parameterType="xyz.wjw.priviligemanagementsystem.dto.RoleSelectQuery" resultMap="SelectRoleVo,userTotal1">
     SELECT
-    sys_role.id,
-    sys_role.`name`,
-    sys_role.remark,
-    sys_role.`status`,
-    sys_role.isDeleted
+      sys_role.id,
+      sys_role.`name`,
+      sys_role.remark,
+      sys_role.`status`,
+      sys_role.isDeleted
     FROM
-    sys_role
+      sys_role
     <where>
       <if test="name!=null and name!=''">
         sys_role.`name` LIKE "%"#{name}"%"
@@ -47,7 +47,27 @@
   </update>
   <update id="roleIsdeleted">
     update sys_role set isDeleted=case isDeleted
-                                    when 0 then 1
-                                    else 0 end where id=#{id}
+                                 when 0 then 1
+                                 else 0 end where id=#{id}
   </update>
+
+  <delete id="delRoleMenuFirst" parameterType="java.lang.Long" >
+    delete from role_menu
+    where roleId = #{roleId}
+  </delete>
+
+  <!--添加权限-->
+  <insert id="updateTree" parameterType="xyz.wjw.priviligemanagementsystem.entity.roleMenu">
+    insert into role_menu (menuId, roleId)
+    values
+      (#{i}, #{roleId})
+  </insert>
+
+  <!--查询哪个角色拥有的权限-->
+  <select id="selectRoleMenu" resultType="Integer">
+    select role_menu.menuId
+    from role_menu
+           left join sys_role on role_menu.roleId=sys_role.id
+    where sys_role.id=#{id}
+  </select>
 </mapper>

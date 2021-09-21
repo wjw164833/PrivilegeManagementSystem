@@ -5,13 +5,15 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.wjw.priviligemanagementsystem.bo.MenuSelectBo;
-import xyz.wjw.priviligemanagementsystem.dto.MenuSelectQuery;
 import xyz.wjw.priviligemanagementsystem.entity.Menu;
+import xyz.wjw.priviligemanagementsystem.entity.MenuOther;
 import xyz.wjw.priviligemanagementsystem.mapper.MenuMapper;
 import xyz.wjw.priviligemanagementsystem.service.MenuService;
-import xyz.wjw.priviligemanagementsystem.util.DataCheckUtils;
-import xyz.wjw.priviligemanagementsystem.util.PaginationUtils;
-import xyz.wjw.priviligemanagementsystem.vo.*;
+import xyz.wjw.priviligemanagementsystem.vo.Node;
+import xyz.wjw.priviligemanagementsystem.vo.NodeOther;
+import xyz.wjw.priviligemanagementsystem.vo.Result;
+import xyz.wjw.priviligemanagementsystem.vo.SelectMenuVo;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class MenuImpl implements MenuService {
 
     @Autowired
     private MenuMapper menuMapper;
+
 
     private List<Node> recursion(List<SelectMenuVo> list, Long pid){
         List<Node> ret = new ArrayList<>();
@@ -76,12 +79,12 @@ public class MenuImpl implements MenuService {
     public Result menuAdd(MenuSelectBo menuSelectBo) {
         Menu menu = new Menu();
         menu.setName(menuSelectBo.getName());
-        menu.setAppUrl(menuSelectBo.getAppUrl());
-        menu.setImgUrl(menuSelectBo.getImgUrl());
+        menu.setAppurl(menuSelectBo.getAppUrl());
+        menu.setImgurl(menuSelectBo.getImgUrl());
         menu.setType(menuSelectBo.getType());
-        menu.setSortCode(menuSelectBo.getSortCode());
-        menu.setParentId(menuSelectBo.getParentId());
-        menu.setIsDeleted(menuSelectBo.getIsDeleted());
+        menu.setSortcode(menuSelectBo.getSortCode());
+        menu.setParentid(menuSelectBo.getParentId());
+        menu.setIsdeleted(menuSelectBo.getIsDeleted());
         int row =menuMapper.insert(menu);
         //判断插入结果
         if (row == 0) {
@@ -94,12 +97,12 @@ public class MenuImpl implements MenuService {
     public Result menuUpdate(MenuSelectBo menuSelectBo) {
         Menu menu = new Menu();
         menu.setName(menuSelectBo.getName());
-        menu.setAppUrl(menuSelectBo.getAppUrl());
-        menu.setImgUrl(menuSelectBo.getImgUrl());
+        menu.setAppurl(menuSelectBo.getAppUrl());
+        menu.setImgurl(menuSelectBo.getImgUrl());
         menu.setType(menuSelectBo.getType());
-        menu.setSortCode(menuSelectBo.getSortCode());
-        menu.setParentId(menuSelectBo.getParentId());
-        menu.setIsDeleted(menuSelectBo.getIsDeleted());
+        menu.setSortcode(menuSelectBo.getSortCode());
+        menu.setParentid(menuSelectBo.getParentId());
+        menu.setIsdeleted(menuSelectBo.getIsDeleted());
         UpdateWrapper<Menu> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda().eq(Menu::getId, menuSelectBo.getId());
         int row =menuMapper.update(menu, updateWrapper);
@@ -115,10 +118,51 @@ public class MenuImpl implements MenuService {
         int row =menuMapper.menuDelete(ids);
         //判断删除结果
         if (row == 0) {
-            return Result.error("删除用户失败");
+            return Result.error("删除权限列表失败");
         }
         return Result.success(row);
     }
 
+    @Override
+    public List<NodeOther> menuSelected() {
+        List<MenuOther> list = menuMapper.selectAll();
+        List<NodeOther> ret = new ArrayList<>();
+        if(list != null){
+            list.forEach(item -> {
+                if(item.getParentid().equals(new Long(0))){
+                    NodeOther node = new NodeOther();
+                    node.setId(item.getId());
+                    //node.setChecked(item.getRoleId()==null?false:true);
+                    node.setIcon("");
+                    node.setSpread(true);
+                    node.setTitle(item.getTitle());
+                    node.setUrl(item.getAppurl());
+                    node.setType(item.getType());
+                    node.setChildren(recursioned(list,node.getId()));
+                    ret.add(node);
+                }
+            });
+        }
+        return ret;
+    }
+
+    private List<NodeOther> recursioned(List<MenuOther> list, Long pid){
+        List<NodeOther> ret = new ArrayList<>();
+        list.forEach(item->{
+            if(item.getParentid().equals(pid)){
+                NodeOther node = new NodeOther();
+                node.setId(item.getId());
+                //node.setChecked(item.getRoleId()==null?false:true);
+                node.setIcon("");
+                node.setSpread(true);
+                node.setTitle(item.getTitle());
+                node.setUrl(item.getAppurl());
+                node.setType(item.getType());
+                node.setChildren(recursioned(list, node.getId()));
+                ret.add(node);
+            }
+        });
+        return ret;
+    }
 
 }

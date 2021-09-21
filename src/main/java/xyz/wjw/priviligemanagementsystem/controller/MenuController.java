@@ -6,11 +6,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.wjw.priviligemanagementsystem.bo.MenuDeleteBo;
 import xyz.wjw.priviligemanagementsystem.bo.MenuSelectBo;
+import xyz.wjw.priviligemanagementsystem.entity.Menu;
 import xyz.wjw.priviligemanagementsystem.service.MenuService;
 import xyz.wjw.priviligemanagementsystem.vo.Node;
+import xyz.wjw.priviligemanagementsystem.vo.NodeOther;
 import xyz.wjw.priviligemanagementsystem.vo.Result;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ASUS
@@ -29,7 +34,8 @@ public class MenuController {
 
 
     @ApiOperation(value = "菜单查询", notes = "菜单查询接口")
-    @PostMapping("/menuSelect")
+    @ResponseBody
+    @RequestMapping("/menuSelect")
     public List<Node> menuSelect(String name) {
         return menuService.menuSelect(name
         );
@@ -56,4 +62,11 @@ public class MenuController {
         return menuService.menuDelete(menuDeleteBo.getIds()
         );
     }
+
+    @RequestMapping(value = "/treeload")
+    @ResponseBody
+    public List<NodeOther> treeload(){
+        return menuService.menuSelected();
+    }
+
 }

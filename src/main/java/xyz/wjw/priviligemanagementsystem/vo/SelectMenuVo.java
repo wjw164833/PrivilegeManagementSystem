@@ -3,6 +3,9 @@ package xyz.wjw.priviligemanagementsystem.vo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * @author ASUS
+ */
 @Data
 public class SelectMenuVo {
     @ApiModelProperty(value = "菜单id")

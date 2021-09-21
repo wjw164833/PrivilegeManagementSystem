@@ -10,6 +10,7 @@ import xyz.wjw.priviligemanagementsystem.dto.RoleSelectQuery;
 import xyz.wjw.priviligemanagementsystem.entity.Role;
 import xyz.wjw.priviligemanagementsystem.entity.User;
 import xyz.wjw.priviligemanagementsystem.mapper.RoleMapper;
+import xyz.wjw.priviligemanagementsystem.mapper.roleMenuMapper;
 import xyz.wjw.priviligemanagementsystem.service.RoleService;
 import xyz.wjw.priviligemanagementsystem.util.DataCheckUtils;
 import xyz.wjw.priviligemanagementsystem.util.PaginationUtils;
@@ -23,6 +24,8 @@ public class RoleImpl implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private xyz.wjw.priviligemanagementsystem.mapper.roleMenuMapper roleMenuMapper;
 
 
     @Override
@@ -125,4 +128,20 @@ public class RoleImpl implements RoleService {
         }
         return Result.success();
     }
+
+    @Override
+    public boolean delRoleMenuFirst(Long roleId) {
+        return roleMenuMapper.delRoleMenuFirst(roleId);
+    }
+
+    @Override
+    public boolean updateTree(Long roleId, String i) {
+        return roleMenuMapper.updateTree(roleId,i);
+    }
+
+    @Override
+    public List<Integer> selectRoleMenu(Long id) {
+        return roleMapper.selectRoleMenu(id);
+    }
+
 }

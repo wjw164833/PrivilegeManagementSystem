@@ -20,4 +20,6 @@ public interface RoleMapper extends BaseMapper<Role> {
     int roleStatus(Role role);
 
     int roleIsdeleted(Role role);
+
+    List<Integer> selectRoleMenu(Long id);
 }

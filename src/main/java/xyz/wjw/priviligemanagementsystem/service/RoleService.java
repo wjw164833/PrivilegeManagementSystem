@@ -34,4 +34,11 @@ public interface RoleService {
     );
 
     Result roleIsdeleted(Role role);
+
+
+    boolean delRoleMenuFirst(Long roleId);
+
+    boolean updateTree(Long roleId, String i);
+
+    List<Integer> selectRoleMenu(Long id);
 }

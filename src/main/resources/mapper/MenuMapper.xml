@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="xyz.wjw.priviligemanagementsystem.mapper.MenuMapper" >
+    <resultMap id="BaseResultMap" type="xyz.wjw.priviligemanagementsystem.entity.MenuOther" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="title" jdbcType="VARCHAR" />
+        <result column="appUrl" property="appurl" jdbcType="VARCHAR" />
+        <result column="imgUrl" property="imgurl" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="SMALLINT" />
+        <result column="sortCode" property="sortcode" jdbcType="INTEGER" />
+        <result column="parentId" property="parentid" jdbcType="BIGINT" />
+        <result column="isDeleted" property="isdeleted" jdbcType="SMALLINT" />
+    </resultMap>
 
     <select id="selectMenu" parameterType="String" resultType="xyz.wjw.priviligemanagementsystem.entity.Menu">
         select * from sys_menu where isDeleted = 0
@@ -22,6 +32,17 @@
             </if>
         </where>
         order by a.parentId,a.sortCode
+    </select>
+
+    <sql id="Base_Column_List" >
+        id, `name`, appUrl, imgUrl, type, sortCode, parentId, isDeleted
+    </sql>
+    <!--全部查询-->
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from sys_menu
+        order by parentId,sortCode
     </select>
 
     <delete id="menuDelete">

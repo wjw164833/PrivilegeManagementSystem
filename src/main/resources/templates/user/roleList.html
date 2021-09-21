@@ -36,12 +36,16 @@
         <i class="layui-icon" style="font-size: smaller" lay-event="batchDel">&#xe640;&nbsp批量删除</i>
     </button>
     <button type="button" class="layui-btn layui-btn-sm layui-btn-warm">
-        <i class="layui-icon" style="font-size: smaller" lay-event="batchAdd">&#xe624;&nbsp新增</i>
+            <i class="layui-icon" style="font-size: smaller" lay-event="add1">&#xe624;新增
+        </i>
     </button>
 </div>
 <div id="btn1" style="display:none;">
     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">
         <i class="layui-icon" style="font-size: smaller" lay-event="edit"> &#xe642;编辑</i>
+    </button>
+    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">
+        <i class="layui-icon" style="font-size: smaller" lay-event="menuedit"> &#xe716;角色权限分配</i>
     </button>
     <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">
         <i class="layui-icon" style="font-size: smaller" lay-event="del">&#xe640;删除</i>
@@ -187,7 +191,7 @@
 
                     });
                 });
-            }else if (obj.event === 'batchAdd') {
+            }else if (obj.event === 'add1') {
                 //layer.msg("新增");
                 layer.open({
                     type: 2,
@@ -304,6 +308,16 @@
                         }
                     })
                 });
+            }else if (obj.event === 'menuedit') {
+                window.userData=data;
+                let index=layer.open({
+                    type: 2,
+                    anim:0,
+                    title: '分配权限',
+                    skin:'',
+                    area: ['30%','70%'],
+                    content : '/assignment?id='+data.id,
+                });
             }
         });
     });
@@ -327,7 +341,7 @@
             maxmin:true,//最大最小化。
             shadeClose: true,//是否点击遮罩关闭
             area: ['35%', '80%'],//宽高
-            content: '/register1'
+            content:'/register1'
         });
     }
 </script>
