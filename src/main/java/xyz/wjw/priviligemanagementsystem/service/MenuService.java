@@ -24,4 +24,6 @@ public interface MenuService {
 
 
     List<NodeOther> menuSelected();
+
+    List<NodeOther> treeloadIndex(String id);
 }

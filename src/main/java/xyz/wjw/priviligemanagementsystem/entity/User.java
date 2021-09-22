@@ -46,4 +46,5 @@ public class User implements Serializable {
     @TableField("login_token")
     private String loginToken;
 
+
 }

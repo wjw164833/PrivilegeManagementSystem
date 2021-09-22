@@ -51,7 +51,7 @@ public class UserController {
     @ApiOperation(value = "登录", notes = "登录接口")
     @RequestMapping("/login")
     @ResponseBody
-    public Result login( UserSelectBo userSelectBo) {
+    public Result login( UserSelectBo userSelectBo,HttpSession session) {
 //        ResponseResult result = new ResponseResult();
 //        // 1 从Shiro框架中，获取一个Subject对象，代表当前会话的用户
 //        Subject subject = SecurityUtils.getSubject();
@@ -69,7 +69,7 @@ public class UserController {
 //        return result;
         Result result =new Result();
         System.out.println(result.getCode());
-        return userService.login(userSelectBo);
+        return userService.login(userSelectBo,session);
     }
 
     @ApiOperation(value = "用户信息", notes = "用户信息接口")

@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import xyz.wjw.priviligemanagementsystem.bo.MenuDeleteBo;
 import xyz.wjw.priviligemanagementsystem.bo.MenuSelectBo;
 import xyz.wjw.priviligemanagementsystem.entity.Menu;
+import xyz.wjw.priviligemanagementsystem.entity.User;
 import xyz.wjw.priviligemanagementsystem.service.MenuService;
 import xyz.wjw.priviligemanagementsystem.vo.Node;
 import xyz.wjw.priviligemanagementsystem.vo.NodeOther;
 import xyz.wjw.priviligemanagementsystem.vo.Result;
 
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -69,4 +71,11 @@ public class MenuController {
         return menuService.menuSelected();
     }
 
+    @RequestMapping(value = "/treeloadIndex")
+    @ResponseBody
+    public List<NodeOther> treeloadIndex(HttpSession session){
+        User user=(User)session.getAttribute("userSession");
+        System.out.println(user.getId());
+        return menuService.treeloadIndex(user.getId());
+    }
 }

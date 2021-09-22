@@ -21,4 +21,6 @@ public interface MenuMapper extends BaseMapper<Menu> {
     int menuDelete(List<String> ids);
 
     List<MenuOther> selectAll();
+
+    List<MenuOther> treeloadIndex(String id);
 }

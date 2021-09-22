@@ -54,4 +54,11 @@
     </delete>
 
 
+    <!--全部查询-->
+    <select id="treeloadIndex" resultMap="BaseResultMap" >
+        select a.* from sys_menu a
+                            join role_menu b on a.id=b.menuId
+                            join user_role c on c.roleId= b.roleId
+        where c.userId = #{id}
+    </select>
 </mapper>

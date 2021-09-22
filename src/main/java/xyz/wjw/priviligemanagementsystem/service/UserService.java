@@ -7,13 +7,15 @@ import xyz.wjw.priviligemanagementsystem.entity.Role;
 import xyz.wjw.priviligemanagementsystem.entity.User;
 import xyz.wjw.priviligemanagementsystem.vo.Result;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public interface UserService {
 
     @NonNull
     Result login(
-            UserSelectBo userSelectBo
+            UserSelectBo userSelectBo,
+            HttpSession session
 
     );
 

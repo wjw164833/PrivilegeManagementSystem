@@ -20,6 +20,7 @@ import xyz.wjw.priviligemanagementsystem.util.PaginationUtils;
 import xyz.wjw.priviligemanagementsystem.util.TokenUtils;
 import xyz.wjw.priviligemanagementsystem.vo.*;
 
+import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class UserImpl implements UserService {
 
     @Override
     public Result login(
-            UserSelectBo userSelectBo) {
+            UserSelectBo userSelectBo, HttpSession session) {
         //数据校验
 //        DataCheckUtils.isNotBlank(userSelectBo.getAccount(), "用户账号不能为空!");
 //        DataCheckUtils.isNotBlank(userSelectBo.getPassword(), "密码不能为空!");
@@ -50,7 +51,7 @@ public class UserImpl implements UserService {
         if (!user.getPassword().equals(userSelectBo.getPassword())) {
             return Result.error("密码错误！");
         }
-
+        session.setAttribute("userSession",user);
         //生成token
         String token = TokenUtils.getJwtToken(user.getId(),user.getPassword());
         //修改登录Token

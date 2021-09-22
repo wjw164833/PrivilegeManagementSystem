@@ -1,0 +1,12 @@
+					 select DISTINCT m.*, rm.menuId
+    from sys_menu m
+		left join role_menu rm on rm.menuId=m.id
+    left join user_role ur on ur.roleId=rm.roleId and ur.userId=2
+    
+		
+		
+					 select DISTINCT m.*, rm.menuId
+    from sys_menu m
+		 join role_menu rm on rm.menuId=m.id
+     join user_role ur on ur.roleId=rm.roleId
+		where  ur.userId=2

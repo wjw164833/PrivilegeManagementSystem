@@ -165,4 +165,28 @@ public class MenuImpl implements MenuService {
         return ret;
     }
 
+    @Override
+    public List<NodeOther> treeloadIndex(String id) {
+        List<MenuOther> list = menuMapper.treeloadIndex(id);
+        List<NodeOther> ret = new ArrayList<>();
+        if(list != null){
+            list.forEach(item -> {
+                //System.out.println(item.getTitle());
+                if(item.getParentid().equals(new Long(0))){
+                    NodeOther node = new NodeOther();
+                    node.setId(item.getId());
+                    //node.setChecked(item.getRoleId()==null?false:true);
+                    node.setIcon("");
+                    node.setSpread(true);
+                    node.setTitle(item.getTitle());
+                    node.setUrl(item.getAppurl());
+                    System.out.println(node.getUrl());
+                    node.setType(item.getType());
+                    node.setChildren(recursioned(list, node.getId()));
+                    ret.add(node);
+                }
+            });
+        }
+        return ret;
+    }
 }
