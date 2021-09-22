@@ -142,7 +142,7 @@
                 var d = [];
                 $.ajax({
                     type: 'POST',
-                    url: '/menu/menuSelect',
+                    url: '/menu/treeload',
                     data: {"name": null},
                     async: false,
                     dataType: 'JSON',
@@ -178,68 +178,68 @@
             });
         });
 
-        /*注册*/
-        function addMenu() {
-            layer.open({
-                title: '添加节点',
-                type: 2,//层类型：2（iframe层）
-                shade: 0.2,//遮罩
-                maxmin: true,//最大最小化。
-                shadeClose: true,//是否点击遮罩关闭
-                area: ['35%', '80%'],//宽高
-                content: '/addMenu'
-            });
-            return -1;
-        }
 
-        function updateMenu() {
-            layer.open({
-                title: '修改节点',
-                type: 2,//层类型：2（iframe层）
-                shade: 0.2,//遮罩
-                maxmin: true,//最大最小化。
-                shadeClose: true,//是否点击遮罩关闭
-                area: ['35%', '80%'],//宽高
-                content: '/updateMenu'
-            });
-            return -1;
-        }
+    } /*注册*/
+    function addMenu() {
+        layer.open({
+            title: '添加节点',
+            type: 2,//层类型：2（iframe层）
+            shade: 0.2,//遮罩
+            maxmin: true,//最大最小化。
+            shadeClose: true,//是否点击遮罩关闭
+            area: ['35%', '80%'],//宽高
+            content: '/addMenu'
+        });
+        return -1;
+    }
 
-        function deleteMenu() { //删除节点
-            var checkStatus = table.checkStatus('demoId1');
-            if (checkStatus.data.length == 0) {
-                layer.msg('请先选择要删除的数据行！', {icon: 2, time: 1100});
-                return;
-            }
-            var id = "";
-            for (var i = 0; i < checkStatus.data.length; i++) {
-                id += checkStatus.data[i].id + ",";
-            }
-            layer.confirm("确定要删除所选数据？删除后无法恢复！", {icon: 3, title: "提示"}, function () {
-                $.ajax({
-                    type: "GET",
-                    url: '/menu/menuDelete',
-                    data: {"ids": id},
-                    success: function (data) {
-                        if (data.code == 200) {
-                            location.reload();
-                            layer.msg('删除成功', {
-                                icon: 6,
-                                time: 1500
-                            });
-                        } else {
-                            layer.msg("删除失败", {icon: 5});
-                        }
-                        layer.close(index);
-                    },
-                    error: function (err) {
-                        console.log(err);
-                        layer.msg('数据异常，操作失败！');
+    function updateMenu() {
+        layer.open({
+            title: '修改节点',
+            type: 2,//层类型：2（iframe层）
+            shade: 0.2,//遮罩
+            maxmin: true,//最大最小化。
+            shadeClose: true,//是否点击遮罩关闭
+            area: ['35%', '80%'],//宽高
+            content: '/updateMenu'
+        });
+        return -1;
+    }
+
+    function deleteMenu() { //删除节点
+        var checkStatus = table.checkStatus('demoId1');
+        if (checkStatus.data.length == 0) {
+            layer.msg('请先选择要删除的数据行！', {icon: 2, time: 1100});
+            return;
+        }
+        var id = "";
+        for (var i = 0; i < checkStatus.data.length; i++) {
+            id += checkStatus.data[i].id + ",";
+        }
+        layer.confirm("确定要删除所选数据？删除后无法恢复！", {icon: 3, title: "提示"}, function () {
+            $.ajax({
+                type: "GET",
+                url: '/menu/menuDelete',
+                data: {"ids": id},
+                success: function (data) {
+                    if (data.code == 200) {
+                        location.reload();
+                        layer.msg('删除成功', {
+                            icon: 6,
+                            time: 1500
+                        });
+                    } else {
+                        layer.msg("删除失败", {icon: 5});
                     }
-                });
+                    layer.close(index);
+                },
+                error: function (err) {
+                    console.log(err);
+                    layer.msg('数据异常，操作失败！');
+                }
             });
-            return -1;
-        }
+        });
+        return -1;
     }
     loadPage();
 </script>
