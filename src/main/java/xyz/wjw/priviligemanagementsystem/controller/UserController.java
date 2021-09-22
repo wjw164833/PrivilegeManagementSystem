@@ -13,6 +13,7 @@ import xyz.wjw.priviligemanagementsystem.bo.UserDeleteBo;
 import xyz.wjw.priviligemanagementsystem.bo.UserSelectBo;
 import xyz.wjw.priviligemanagementsystem.entity.User;
 import xyz.wjw.priviligemanagementsystem.service.Impl.UserImpl;
+import xyz.wjw.priviligemanagementsystem.service.UserRoleService;
 import xyz.wjw.priviligemanagementsystem.service.UserService;
 import xyz.wjw.priviligemanagementsystem.util.JwtUtil;
 import xyz.wjw.priviligemanagementsystem.util.RedisUtil;
@@ -23,6 +24,8 @@ import xyz.wjw.priviligemanagementsystem.vo.Result;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ASUS
@@ -39,6 +42,9 @@ public class UserController {
         this.userService = userService;
     }
 
+
+    @Autowired
+    private UserRoleService userRoleService;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -88,9 +94,24 @@ public class UserController {
 
     @ApiOperation(value = "用户修改", notes = "用户修改接口")
     @PostMapping("/userUpdate")
-    public Result userUpdate(@RequestBody UserSelectBo userSelectBo) {
-        return userService.userUpdate(userSelectBo
+    public Result userUpdate(@RequestBody UserSelectBo userSelectBo,String roleIds) {
+        return userService.userUpdate(userSelectBo,roleIds
         );
+    }
+
+    @ApiOperation(value = "用户修改", notes = "用户修改接口")
+    @RequestMapping("/updateRoleUser")
+    @ResponseBody
+    public Result updateRoleUser(Long userId, String roleIds) {
+        System.out.println(userId+roleIds);
+        List<String> list = Arrays.asList(roleIds.split(","));
+        list.forEach(i -> {
+//            userRole entity = new userRole();
+//            entity.setUserid(userId);
+//            entity.setRoleid(Long.parseLong(i));
+            boolean res = userRoleService.insertAttach(userId, i);
+        });
+        return Result.success();
     }
 
     @ApiOperation(value = "用户删除(单个，批量)", notes = "用户删除接口（单个，批量）")
@@ -114,5 +135,6 @@ public class UserController {
         User user = TokenUtils.getUser(request);
         return userService.loginout(user.getId());
     }
+
 
 }

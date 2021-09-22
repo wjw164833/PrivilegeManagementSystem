@@ -3,6 +3,9 @@ package xyz.wjw.priviligemanagementsystem.bo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import xyz.wjw.priviligemanagementsystem.entity.Dept;
+import xyz.wjw.priviligemanagementsystem.entity.Role;
+import xyz.wjw.priviligemanagementsystem.entity.UserRole;
 
 import java.io.Serializable;
 
@@ -33,4 +36,13 @@ public class UserSelectBo implements Serializable {
     private int page;
     @ApiModelProperty(value = "每页记录条数")
     private int number;
+    private Dept dept;
+
+    private String dname;
+
+    private String rname;
+
+    private Role role;
+
+    private UserRole userRole;
 }

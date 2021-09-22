@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import xyz.wjw.priviligemanagementsystem.dto.UserSelectQuery;
+import xyz.wjw.priviligemanagementsystem.entity.Role;
 import xyz.wjw.priviligemanagementsystem.entity.User;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface UserMapper extends BaseMapper<User> {
     User selectByUserName(String username);
 
     int insertUser(User user);
+
+    List<Role> findUserRole(Long id);
 }

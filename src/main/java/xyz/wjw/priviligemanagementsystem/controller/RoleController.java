@@ -3,12 +3,14 @@ package xyz.wjw.priviligemanagementsystem.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xyz.wjw.priviligemanagementsystem.bo.RoleDeleteBo;
 import xyz.wjw.priviligemanagementsystem.bo.RoleSelectBo;
 import xyz.wjw.priviligemanagementsystem.entity.Role;
 import xyz.wjw.priviligemanagementsystem.service.RoleService;
+import xyz.wjw.priviligemanagementsystem.service.UserService;
 import xyz.wjw.priviligemanagementsystem.vo.Result;
 
 import java.util.Arrays;
@@ -31,6 +33,17 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    @Autowired
+    private UserService userService;
+
+
+    @RequestMapping(value="/findAllRole1")
+    @ResponseBody
+    public  List<Role> findAllRole1(Long id) {
+        //System.out.println(id);
+        List<Role> roleList =userService.findUserRole(id);
+        return roleList;
+    }
 
     @ApiOperation(value = "角色权限查询", notes = "角色权限查询接口")
     @PostMapping("/roleSelect")

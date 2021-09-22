@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="xyz.wjw.priviligemanagementsystem.mapper.UserRoleMapper" >
+  <resultMap id="BaseResultMap" type="xyz.wjw.priviligemanagementsystem.entity.UserRole" >
+    <id column="userId" property="userid" jdbcType="BIGINT" />
+    <result column="roleId" property="roleid" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    userId, roleId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_role
+    where userId = #{userid,jdbcType=BIGINT}
+  </select>
+
+  <delete id="userDelFirst" parameterType="java.lang.Long" >
+    delete from user_role
+    where userId = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="delAllUserFirst">
+    delete from user_role where userId in
+    <foreach collection="list" item="userId" open="(" close=")" separator=",">
+      #{userId}
+    </foreach>
+  </delete>
+
+  <delete id="roleDel" parameterType="java.lang.Long" >
+    delete from user_role
+    where roleId = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="delAllRole">
+    delete from user_role where roleId in
+    <foreach collection="list" item="roleId" open="(" close=")" separator=",">
+      #{roleId}
+    </foreach>
+  </delete>
+
+<!--  添加角色前先删除该用户所有角色-->
+  <delete id="delUserRoleFirst" parameterType="java.lang.Long" >
+    delete from user_role
+    where userId = #{id,jdbcType=BIGINT}
+  </delete>
+
+<!--添加，修改角色-->
+  <insert id="insertAttach" parameterType="xyz.wjw.priviligemanagementsystem.entity.UserRole">
+      insert into user_role (userId, roleId)
+      values
+      (#{id}, #{i})
+  </insert>
+
+  <insert id="insertSelective" parameterType="xyz.wjw.priviligemanagementsystem.entity.UserRole" >
+    insert into user_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="roleid != null" >
+        roleId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="xyz.wjw.priviligemanagementsystem.entity.UserRole" >
+    update user_role
+    <set >
+      <if test="roleid != null" >
+        roleId = #{roleid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where userId = #{userid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="xyz.wjw.priviligemanagementsystem.entity.UserRole" >
+    update user_role
+    set roleId = #{roleid,jdbcType=BIGINT}
+    where userId = #{userid,jdbcType=BIGINT}
+  </update>
+</mapper>

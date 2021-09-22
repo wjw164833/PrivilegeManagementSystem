@@ -42,9 +42,9 @@ public class MenuController {
     }
 
     @ApiOperation(value = "菜单增加", notes = "菜单增加接口")
-    @ResponseBody
+
     @RequestMapping("/menuAdd")
-    public Result menuAdd(MenuSelectBo menuSelectBo) {
+    public Result menuAdd(@RequestBody MenuSelectBo menuSelectBo) {
         return menuService.menuAdd(menuSelectBo
         );
     }

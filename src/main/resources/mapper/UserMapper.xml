@@ -122,4 +122,11 @@
     </trim>
   </insert>
 
+  <!--查询用户拥有哪些角色-->
+  <select id="findUserRole" resultType="xyz.wjw.priviligemanagementsystem.entity.Role" >
+    select a.*, (case when b.userId is null then 0 else 1 end) as hasRight
+    from sys_role a
+           left join (select * from user_role where userId =#{id,jdbcType=BIGINT}) b on a.id=b.roleId
+  </select>
+
 </mapper>

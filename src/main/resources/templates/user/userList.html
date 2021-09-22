@@ -38,6 +38,9 @@
     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">
         <i class="layui-icon" style="font-size: smaller" lay-event="edit"> &#xe642;编辑</i>
     </button>
+    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs">
+        <i class="layui-icon" style="font-size: smaller" lay-event="useredit"> &#xe716;用户分配角色</i>
+    </button>
     <button type="button" class="layui-btn layui-btn-danger layui-btn-xs">
         <i class="layui-icon" style="font-size: smaller" lay-event="del">&#xe640;删除</i>
     </button>
@@ -273,66 +276,35 @@
                                         layer.msg("修改成功", {icon: 6});
                                         sxym();
                                     }
-                                }
-                            })
-                        })
-                // else if (obj.event === 'edit') {
-            //     window.userData = data;
-            //     let index = layer.open({
-            //         type: 2,
-            //         anim: 0,
-            //         title: '编辑信息',
-            //         scrollbar: false,
-            //         area: ['100%', '100%'],
-            //         content: '/user/userUpdate',
-            //         success: function (layero, index) {
-            //             var body = layer.getChildFrame('body', index);
-            //             var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
-            //
-            //             /* 动态赋值下拉框*/
-            //             var depid = data.depid;
-            //             var sex = data.sex;
-            //             if (sex == '0') {
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("男"));
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
-            //             } else if (sex == '1') {
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("女"));
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 2).text("保密"));
-            //             } else {
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", sex).attr("selected", "selected").text("保密"));
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 0).text("男"));
-            //                 layero.find('iframe').contents().find('[name=sex]').append($("<option>").attr("value", 1).text("女"));
-            //             }
-            //             //动态添加部门
-            //             $.post("findAllDept", function (data) {
-            //                 $.each(data, function (index, item) {
-            //                     if (item.id == depid) {
-            //                         //console.log(item.name);
-            //                         layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).attr("selected", "selected").text(item.name));
-            //                     } else {
-            //                         layero.find('iframe').contents().find('[name=deptId]').append($("<option>").attr("value", item.id).text(item.name));
-            //                     }
-            //                 });
-            //                 iframeWin.layui.form.render("select");
-            //             }, 'json');
-            //
-            //             //动态添加角色
-            //             var id = data.id;
-            //             $.post("findAllRole1?id=" + id, function (data) {
-            //                 $.each(data, function (index, item) {
-            //                     console.log(item.name);
-            //                     if (item.hasRight)
-            //                         layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id).attr("checked", "checked"));
-            //                     else
-            //                         layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id));
-            //                 });
-            //                 iframeWin.layui.form.render();
-            //             }, 'json')
-            //
-            //         },
-            //     });
+                                },
+                            });
+                        });
+            }else if (obj.event === 'useredit') {
+                window.userData=data;
+                let index=layer.open({
+                    type: 2,
+                    anim:0,
+                    title: '用户权限',
+                    skin:'',
+                    area: ['30%','30%'],
+                    content : '/updateUser?id='+data.id,
+                    success : function(layero,index) {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象
+
+                        var id = data.id;
+                        $.post("user/findAllRole1?id=" + id, function (data) {
+                            $.each(data, function (index, item) {
+                                console.log(item.name);
+                                if (item.hasRight)
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id).attr("checked", "checked"));
+                                else
+                                    layero.find('iframe').contents().find('[name=demo]').append($("<input type='checkbox' lay-skin='primary'>").attr("title", item.name).attr("name", "role").attr("value", item.id));
+                            });
+                            iframeWin.layui.form.render();
+                        }, 'json')
+                    }
+                });
             }
         });
 

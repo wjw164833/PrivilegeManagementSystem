@@ -3,6 +3,7 @@ package xyz.wjw.priviligemanagementsystem.service;
 import org.springframework.lang.NonNull;
 import xyz.wjw.priviligemanagementsystem.bo.UserDeleteBo;
 import xyz.wjw.priviligemanagementsystem.bo.UserSelectBo;
+import xyz.wjw.priviligemanagementsystem.entity.Role;
 import xyz.wjw.priviligemanagementsystem.entity.User;
 import xyz.wjw.priviligemanagementsystem.vo.Result;
 
@@ -27,6 +28,7 @@ public interface UserService {
 
     Result userUpdate(
             UserSelectBo userSelectBo
+            ,String roleIds
     );
 
     Result userDelete(
@@ -40,4 +42,6 @@ public interface UserService {
     Result loginout(String id);
 
     int userStatus(User user);
+
+    List<Role> findUserRole(Long id);
 }

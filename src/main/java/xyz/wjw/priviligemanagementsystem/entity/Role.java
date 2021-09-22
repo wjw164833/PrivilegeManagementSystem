@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -28,5 +29,9 @@ public class Role implements Serializable {
     private String status;
 
     private String isdeleted;
+
+    private boolean hasRight;
+
+    private List<User> userList;
 
 }

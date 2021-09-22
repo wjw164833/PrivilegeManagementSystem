@@ -9,6 +9,7 @@ import org.springframework.util.DigestUtils;
 import xyz.wjw.priviligemanagementsystem.bo.UserDeleteBo;
 import xyz.wjw.priviligemanagementsystem.bo.UserSelectBo;
 import xyz.wjw.priviligemanagementsystem.dto.UserSelectQuery;
+import xyz.wjw.priviligemanagementsystem.entity.Role;
 import xyz.wjw.priviligemanagementsystem.entity.User;
 import xyz.wjw.priviligemanagementsystem.entity.UserDeleteEntity;
 import xyz.wjw.priviligemanagementsystem.enums.ValidEnum;
@@ -125,7 +126,7 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public Result userUpdate(UserSelectBo userSelectBo) {
+    public Result userUpdate(UserSelectBo userSelectBo,String roleIds) {
         User user = new User();
         user.setId(userSelectBo.getId());
         user.setAccount(userSelectBo.getAccount());
@@ -199,5 +200,10 @@ public class UserImpl implements UserService {
             return Result.error("登出失败!");
         }
         return Result.success();
+    }
+
+    @Override
+    public List<Role> findUserRole(Long id) {
+        return userMapper.findUserRole(id);
     }
 }
